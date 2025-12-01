@@ -1,25 +1,40 @@
 import { useState, useEffect } from 'react';
 import ItemList from './components/ItemList';
 import Controls from './components/Controls';
+import ItemTrack from './components/ItemTrack';
+import RevealModal from './components/RevealModal';
 import {
   loadItems,
   saveItems,
+  loadAssignments,
+  saveAssignments,
   type PickerItem
 } from './utils/storage';
-import ItemTrack from './components/ItemTrack';
+import { randomAssign } from './utils/assign';
+
+const DEFAULT_SLOTS = 3;
 
 /**
  * Main application component.
  */
 export default function App() {
-  // State for the list of items (initialized from storage to avoid setting state inside an effect)
+  // Set states
   const [items, setItems] = useState<PickerItem[]>(() => loadItems());
+  const [assignments, setAssignments] = useState<(string | null)[]>(
+    () => loadAssignments() ?? Array.from({ length: DEFAULT_SLOTS }, () => null)
+  );
+  const [revealedLabel, setRevealedLabel] = useState<string | null>(null);
 
   // Save items on change
   useEffect(() => {
     // Save items to localStorage
     saveItems(items);
   }, [items]);
+
+  // Save assignments on change
+  useEffect(() => {
+    saveAssignments(assignments);
+  }, [assignments]);
 
   // Handlers for item operations
   const addItem = (label: string) => {
@@ -41,18 +56,46 @@ export default function App() {
   // Delete an item by ID
   const deleteItem = (id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
+    // Also remove references in assignments
+    setAssignments((prev) => prev.map((a) => (a === id ? null : a)));
   };
 
   // Clear all items
   const clearAll = () => {
     setItems([]);
+    setAssignments(Array.from({ length: DEFAULT_SLOTS }, () => null));
   };
+
+  // Shuffle assignments
+  const shuffleAssignments = () => {
+    const ids = items.map((i) => i.id);
+    const next = randomAssign(ids, DEFAULT_SLOTS);
+    setAssignments(next);
+  };
+
+  // Handle revealing an item by slot index
+  const handleRevealBySlot = (slotIndex: number) => {
+    const itemId = assignments[slotIndex];
+    const item = items.find((i) => i.id === itemId);
+    setRevealedLabel(item ? item.label : 'Nothing here');
+  };
+
+  const closeModal = () => setRevealedLabel(null);
 
   return (
     <div className="app-container">
       <h1>Random Picker</h1>
 
-      <ItemTrack items={items} />
+      <ItemTrack
+        items={items}
+        assignments={assignments}
+        onRevealBySlot={handleRevealBySlot}
+      />
+
+      <Controls
+        onClear={clearAll}
+        onShuffle={shuffleAssignments}
+      />
 
       <ItemList
         items={items}
@@ -61,7 +104,10 @@ export default function App() {
         onDelete={deleteItem}
       />
 
-      <Controls onClear={clearAll} />
+      <RevealModal
+        label={revealedLabel}
+        onClose={closeModal}
+      />
     </div>
   );
 }

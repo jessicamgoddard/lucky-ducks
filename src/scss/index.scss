@@ -73,21 +73,23 @@ body {
 
   // Individual floating items
   .track-item {
-    position: absolute;
+    border: 2px solid #aaa;
+    background: #fff;
     width: 60px;
     height: 60px;
-    background: #fff;
-    border: 2px solid #aaa;
     border-radius: 50%;
-    display: flex;
-    justify-content: center;
+    display: inline-flex;
     align-items: center;
-    user-select: none;
-    cursor: pointer;
-
-    transition: transform 0.2s ease;
+    justify-content: center;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
     &:hover {
-      transform: scale(1.15);
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    &:focus {
+      outline: 3px solid rgba(66,153,225,0.6);
     }
   }
 
@@ -102,3 +104,9 @@ body {
   }
 }
 
+/* modal button basic */
+.reveal-modal button {
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+  border-radius: 6px;
+}

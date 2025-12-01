@@ -10,13 +10,14 @@ type Props = {
  */
 export default function Item({ label, revealed, onReveal, style }: Props) {
   return (
-    <div
+    <button
       className="track-item"
       style={style}
       onClick={onReveal}
       title="Click to reveal"
+      aria-label={revealed ? `Revealed: ${label}` : 'Hidden item — click to reveal'}
     >
       {revealed ? label : '❓'}
-    </div>
+    </button>
   );
 }
