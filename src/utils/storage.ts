@@ -16,11 +16,14 @@ export type PickerItem = {
  */
 export function loadItems(): PickerItem[] {
   try {
+    // Try to get our items from localStorage
     const raw = localStorage.getItem(STORAGE_KEY);
+    // If nothing found, return empty array
     if (!raw) return [];
-    return JSON.parse(raw);
-  } catch (err) {
-    console.error('Error loading items', err);
+    // Parse and return the items
+    return JSON.parse(raw) as PickerItem[];
+  } catch {
+    // Otherwise, return empty array
     return [];
   }
 }
@@ -32,8 +35,7 @@ export function loadItems(): PickerItem[] {
  */
 export function saveItems(items: PickerItem[]) {
   try {
+    // Try to save our items to localStorage
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  } catch (err) {
-    console.error('Error saving items', err);
-  }
+  } catch {} // eslint-disable-line no-empty
 }

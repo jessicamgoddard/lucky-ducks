@@ -4,20 +4,26 @@ import type { PickerItem } from '../utils/storage';
 type Props = {
   items: PickerItem[];
   onAdd: (label: string) => void;
-  onUpdate: (id: string, newLabel: string) => void;
+  onUpdate: (id: string, label: string) => void;
   onDelete: (id: string) => void;
-}
+};
 
-export default function ItemList({ items, onAdd, onUpdate, onDelete}: Props) {
+/**
+ * Component to display and manage a list of items.
+ */
+export default function ItemList({ items, onAdd, onUpdate, onDelete }: Props) {
+  // Set up states for new item and editing
   const [newLabel, setNewLabel] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
 
+  // Handle editing an item
   const startEdit = (item: PickerItem) => {
     setEditingId(item.id);
     setEditValue(item.label);
   };
 
+  // Handle finishing editing an item
   const finishEdit = () => {
     if (editingId && editValue.trim()) {
       onUpdate(editingId, editValue.trim());
