@@ -6,6 +6,7 @@ import {
   saveItems,
   type PickerItem
 } from './utils/storage';
+import ItemTrack from './components/ItemTrack';
 
 /**
  * Main application component.
@@ -50,6 +51,8 @@ export default function App() {
   return (
     <div className="app-container">
       <h1>Random Picker</h1>
+
+      <ItemTrack items={items} />
 
       <ItemList
         items={items}
