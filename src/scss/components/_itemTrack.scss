@@ -1,0 +1,37 @@
+.item-track {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin-inline: 100px;
+  border-radius: 50%;
+  overflow: visible;
+}
+
+.item-track__ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid #ddd;
+}
+
+.item-track__rotator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: rotate 12s linear infinite;
+}
+
+// Rotation animation
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+     transform: rotate(360deg);
+  }
+}

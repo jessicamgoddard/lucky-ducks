@@ -1,3 +1,5 @@
+import '../scss/components/_revealModal.scss';
+
 type Props = {
   label: string | null;
   onClose: () => void;

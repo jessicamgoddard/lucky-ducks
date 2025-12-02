@@ -1,3 +1,5 @@
+import '../scss/components/_item.scss';
+
 type Props = {
   label: string;
   revealed: boolean;
@@ -11,7 +13,7 @@ type Props = {
 export default function Item({ label, revealed, onReveal, style }: Props) {
   return (
     <button
-      className="track-item"
+      className="item"
       style={style}
       onClick={onReveal}
       title="Click to reveal"

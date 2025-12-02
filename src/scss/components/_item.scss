@@ -1,0 +1,23 @@
+// Individual floating items
+.item {
+  border: 2px solid #aaa;
+  background: #fff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
+  
+  &:focus {
+    outline: 3px solid rgba(66,153,225,0.6);
+  }
+}

@@ -1,6 +1,8 @@
 import Item from './Item';
 import type { PickerItem } from '../utils/storage';
 
+import '../scss/components/_itemTrack.scss';
+
 type Props = {
   items: PickerItem[];
   assignments: (string | null)[];
@@ -19,9 +21,9 @@ export default function ItemTrack({ items, assignments, onRevealBySlot }: Props)
 
   return (
     <div className="item-track" aria-label="Item track">
-      <div className="track-ring" />
+      <div className="item-track__ring" />
 
-      <div className="rotating-layer" aria-hidden>
+      <div className="item-track__rotator" aria-hidden>
         {Array.from({ length: slots }).map((_, i) => {
           const angle = (i / slots) * Math.PI * 2;
           const x = center + radius * Math.cos(angle) - 30;

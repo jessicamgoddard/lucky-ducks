@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { PickerItem } from '../utils/storage';
 
+import '../scss/components/_itemList.scss';
+
 type Props = {
   items: PickerItem[];
   onAdd: (label: string) => void;

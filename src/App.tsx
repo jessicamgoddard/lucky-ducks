@@ -21,7 +21,7 @@ export default function App() {
   // Set states
   const [items, setItems] = useState<PickerItem[]>(() => loadItems());
   const [assignments, setAssignments] = useState<(string | null)[]>(
-    () => loadAssignments() ?? Array.from({ length: DEFAULT_SLOTS }, () => null)
+    () => loadAssignments() ?? []
   );
   const [revealedLabel, setRevealedLabel] = useState<string | null>(null);
 
@@ -69,7 +69,7 @@ export default function App() {
   // Shuffle assignments
   const shuffleAssignments = () => {
     const ids = items.map((i) => i.id);
-    const next = randomAssign(ids, DEFAULT_SLOTS);
+    const next = randomAssign(ids, items.length);
     setAssignments(next);
   };
 
@@ -83,8 +83,8 @@ export default function App() {
   const closeModal = () => setRevealedLabel(null);
 
   return (
-    <div className="app-container">
-      <h1>Random Picker</h1>
+    <div className="app__container">
+      <h1 className="app__title">Random Picker</h1>
 
       <ItemTrack
         items={items}
@@ -92,17 +92,19 @@ export default function App() {
         onRevealBySlot={handleRevealBySlot}
       />
 
-      <Controls
-        onClear={clearAll}
-        onShuffle={shuffleAssignments}
-      />
+      <div className="app__controls">
+        <ItemList
+          items={items}
+          onAdd={addItem}
+          onUpdate={updateItem}
+          onDelete={deleteItem}
+        />
 
-      <ItemList
-        items={items}
-        onAdd={addItem}
-        onUpdate={updateItem}
-        onDelete={deleteItem}
-      />
+        <Controls
+          onClear={clearAll}
+          onShuffle={shuffleAssignments}
+        />
+      </div>
 
       <RevealModal
         label={revealedLabel}
