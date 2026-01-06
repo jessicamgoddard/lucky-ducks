@@ -1,23 +1,65 @@
 // Individual floating items
 .item {
-  border: 2px solid #aaa;
-  background: #fff;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  animation: itemMove 40s linear infinite;
+  background-color: transparent;
+  border: 0;
+  cursor: grab;
+  height: 80px;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  transform: scaleX(-1);
+  width: 80px;
+
+  &::before,
+  &::after {
+    content: '';
+    display: block;
+  }
+
+  &::before {
+    background-image: url('../src/assets/rubber-duck.svg');
+    background-position: center 10px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 100%;
+    position: relative;
+    transition: background-position 0.3s ease;
+    width: 100%;
+    z-index: 1;
+  }
+
+  &::after {
+    background-color: rgb(5, 6, 51);
+    border-radius: 50%;
+    bottom: -10%;
+    display: block;
+    height: 15%;
+    opacity: 0.4;
+    position: absolute;
+    transform-origin: center;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    width: 100%;
+  }
 
   &:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+
+    &::before {
+      background-position: center;
+    }
+
+    &::after {
+      opacity: 0.3;
+      transform: scale(1.1);
+    }
   }
-  
-  &:focus {
-    outline: 3px solid rgba(66,153,225,0.6);
+}
+
+@keyframes itemMove {
+  0% {
+    left: -70px;
+  }
+  100% {
+    left: 100%;
   }
 }

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Item from './Item';
 import type { PickerItem } from '../utils/storage';
 
@@ -14,20 +16,15 @@ type Props = {
  */
 export default function ItemTrack({ items, assignments, onRevealBySlot }: Props) {
   const slots = assignments.length;
-  const radius = 120; // distance from center
-  const center = 150; // track is 300x300
-
   const map = new Map(items.map((item) => [item.id, item.label]));
 
   return (
     <div className="item-track" aria-label="Item track">
-      <div className="item-track__ring" />
+      <div className="item-track__edge" />
+      <div className="item-track__track" />
 
-      <div className="item-track__rotator" aria-hidden>
+      <div className="item-track__items" aria-hidden>
         {Array.from({ length: slots }).map((_, i) => {
-          const angle = (i / slots) * Math.PI * 2;
-          const x = center + radius * Math.cos(angle) - 30;
-          const y = center + radius * Math.sin(angle) - 30;
           const itemId = assignments[i];
           const label = itemId ? map.get(itemId) ?? '—' : null;
 
@@ -37,11 +34,11 @@ export default function ItemTrack({ items, assignments, onRevealBySlot }: Props)
               label={label ?? ''}
               revealed={false} // reveal handled by modal; visually keep ? on items
               onReveal={() => onRevealBySlot(i)}
-              style={{ left: x, top: y, position: 'absolute' }}
             />
           );
         })}
       </div>
+      <div className="item-track__edge" />
     </div>
   );
 }
