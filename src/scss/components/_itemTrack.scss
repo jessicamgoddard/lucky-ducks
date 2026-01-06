@@ -30,6 +30,13 @@
   // -webkit-mask-position: 0 0;
 }
 
+.item-track__items {
+  position: absolute;
+  top: -30px;
+  width: 100%;
+  z-index: 1;
+}
+
 .item-track__edge {
   background-color: #444;
   border-top: 10px solid #666;
@@ -38,6 +45,11 @@
 
 .item-track__edge:first-child {
   margin-bottom: -110px;
+}
+
+.item-track__edge:last-child {
+  position: relative;
+  z-index: 2;
 }
 
 @keyframes waveMove {

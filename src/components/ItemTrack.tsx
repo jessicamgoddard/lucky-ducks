@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import Item from './Item';
 import type { PickerItem } from '../utils/storage';
 
@@ -34,6 +32,8 @@ export default function ItemTrack({ items, assignments, onRevealBySlot }: Props)
               label={label ?? ''}
               revealed={false} // reveal handled by modal; visually keep ? on items
               onReveal={() => onRevealBySlot(i)}
+              slot={i}
+              totalSlots={slots}
             />
           );
         })}
