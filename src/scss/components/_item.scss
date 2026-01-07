@@ -1,16 +1,15 @@
 // Individual floating items
 .item {
-  animation: itemMove 40s linear infinite;
+  animation: itemTravel var(--travel-rate) linear infinite, itemBob var(--bob-rate) linear infinite alternate;
+  aspect-ratio: 1;
   background-color: transparent;
   border: 0;
   cursor: grab;
-  height: 80px;
   left: -100px;
   padding: 0;
   position: absolute;
   top: 0;
-  transform: scaleX(-1);
-  width: 80px;
+  width: 90px;
 
   &::before,
   &::after {
@@ -19,13 +18,13 @@
   }
 
   &::before {
-    background-image: url('../src/assets/rubber-duck.svg');
-    background-position: center 10px;
+    background-image: url('../src/assets/rubber-duck-2.svg');
+    background-position: center 3px;
     background-repeat: no-repeat;
     background-size: contain;
     height: 100%;
     position: relative;
-    transition: background-position 0.3s ease;
+    transition: background-position 0.3s ease, transform 0.3s ease;
     width: 100%;
     z-index: 1;
   }
@@ -34,6 +33,7 @@
     background: radial-gradient(
       ellipse,
       rgb(20, 40, 90) 0%,
+      rgb(20, 40, 90) 20%,
       transparent 80%
     );
     bottom: -10%;
@@ -49,7 +49,8 @@
   &:hover {
 
     &::before {
-      background-position: center;
+      background-position: center -3px;
+      transform: scale(1.05);
     }
 
     &::after {
@@ -59,8 +60,17 @@
   }
 }
 
-@keyframes itemMove {
+@keyframes itemTravel {
   100% {
     left: 100%;
+  }
+}
+
+@keyframes itemBob {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(2px);
   }
 }
