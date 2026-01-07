@@ -83,7 +83,7 @@ export default function App() {
   const closeModal = () => setRevealedLabel(null);
 
   return (
-    <div className="app__container">
+    <div className="app">
       <h1 className="app__title">Random Picker</h1>
 
       <ItemTrack

@@ -1,3 +1,5 @@
+import '../scss/components/_controls.scss';
+
 type Props = {
   onClear: () => void;
   onShuffle: () => void;

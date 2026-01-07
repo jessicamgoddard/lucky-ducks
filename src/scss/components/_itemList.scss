@@ -1,0 +1,18 @@
+@use '../mixins' as *;
+
+.item-list ul {
+  display: grid;
+  grid-template-columns: 1fr repeat(2, auto);
+  gap: 2vw;
+  padding-left: 0;
+}
+
+.item-list li {
+  display: grid;
+  grid-column: span 3;
+  grid-template-columns: subgrid;
+}
+
+.item-list button {
+  @include button();
+}
