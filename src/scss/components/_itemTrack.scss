@@ -8,11 +8,11 @@
   animation: waveMove 6s linear infinite;
   background: linear-gradient(
     to bottom,
-    #7ec8ff 0%,     /* light top */
-    #5bb1ff 30%,    /* mid-light */
-    #3aa0ff 60%,    /* mid */
-    #1671d1 85%,    /* dark bottom */
-    #0f4a8a 100%    /* deepest bottom */
+    #7ec8ff 0%,
+    #5bb1ff 30%,
+    #3aa0ff 60%,
+    #1671d1 85%,
+    #0f4a8a 100% 
   );
   height: 100px;
   mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><path d="M0,35 C30,45 70,30 100,38 C130,42 170,28 200,35 L200,100 L0,100 Z" fill="white"/></svg>');
@@ -22,12 +22,6 @@
   overflow: hidden;
   position: relative;
   width: 100%;
-  
-  /* Smooth top wave mask (repeating SVG) */
-  // -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><path d="M0,35 C30,45 70,30 100,38 C130,42 170,28 200,35 L200,100 L0,100 Z" fill="white"/></svg>');
-  // -webkit-mask-repeat: repeat-x;
-  // -webkit-mask-size: auto 100%;
-  // -webkit-mask-position: 0 0;
 }
 
 .item-track__items {
@@ -53,6 +47,6 @@
 }
 
 @keyframes waveMove {
-  0%   { -webkit-mask-position: 0 0; mask-position: 0 0; }
-  100% { -webkit-mask-position: 200px 0; mask-position: 200px 0; }
+  0%   { mask-position: 0 0; }
+  100% { mask-position: 200px 0; }
 }

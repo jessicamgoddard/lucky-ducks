@@ -16,15 +16,15 @@ type Props = {
  * Component to display a single item.
  */
 export default function Item({ label, revealed, onReveal, slot, totalSlots }: Props) {
-  const [speed] = useState(() => getRandomNumber(20, 40));
+  const [travelDuration] = useState(() => getRandomNumber(5, 10));
   const [delay] = useState(() => getRandomNumber(0, 2));
   const [top] = useState(() => getItemTop(slot, totalSlots));
-  const [bobRate] = useState(() => getRandomNumber(0.7, 1));
+  const [bobDuration] = useState(() => getRandomNumber(0.7, 1));
   const style = {
     animationDelay: `${delay}s`,
     top: `${top}px`,
-    ['--travel-rate']: `${speed}s`,
-    ['--bob-rate']: `${bobRate}s`,
+    ['--travel-duration']: `${travelDuration}s`,
+    ['--bob-duration']: `${bobDuration}s`,
   };
   
   return (

@@ -1,6 +1,6 @@
 // Individual floating items
 .item {
-  animation: itemTravel var(--travel-rate) linear infinite, itemBob var(--bob-rate) linear infinite alternate;
+  animation: itemTravel var(--travel-duration) linear infinite, itemBob var(--bob-duration) linear infinite alternate;
   aspect-ratio: 1;
   background-color: transparent;
   border: 0;
@@ -10,6 +10,14 @@
   position: absolute;
   top: 0;
   width: 90px;
+
+  @media (min-width: 700px) {
+    animation-duration: calc(var(--travel-duration) * 2), var(--bob-duration);
+  }
+
+  @media (min-width: 1000px) {
+    animation-duration: calc(var(--travel-duration) * 3), var(--bob-duration);
+  }
 
   &::before,
   &::after {
@@ -61,16 +69,9 @@
 }
 
 @keyframes itemTravel {
-  100% {
-    left: 100%;
-  }
+  100% { left: 100%; }
 }
 
 @keyframes itemBob {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(2px);
-  }
+  100% { transform: translateY(2px); }
 }
