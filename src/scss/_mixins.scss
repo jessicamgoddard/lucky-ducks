@@ -1,6 +1,14 @@
 @mixin button {
   background-color: transparent;
   border-width: 1px;
+  cursor: pointer;
   padding: 1vw 4vw;
   text-transform: uppercase;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover,
+  &:focus {
+    background-color: #0f4a8a;
+    color: #fff;
+  }
 }

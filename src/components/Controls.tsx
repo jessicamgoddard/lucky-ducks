@@ -10,7 +10,7 @@ type Props = {
  */
 export default function Controls({ onClear, onShuffle }: Props) {
   return (
-    <div className="controls">
+    <div className="control-bar">
       <button onClick={onShuffle}>Shuffle / Reassign</button>
       <button onClick={onClear}>Clear All Items</button>
     </div>

@@ -1,14 +1,24 @@
 body {
   font-family: 'Inter', sans-serif;
+  line-height: 1.2;
   margin: 0;
 }
 
-.app__title,
-.app__controls {
+.container {
+  height: calc(100vh - 250px);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-width: 50rem;
+  margin-inline: auto;
+  position: relative;
+}
+
+.title,
+.controls {
   padding-inline: 5vw;
 }
 
-.app__title {
+.title {
   margin-bottom: 20px;
   text-align: center;
   width: 100%;

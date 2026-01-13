@@ -1,13 +1,17 @@
 @use '../mixins' as *;
 
-.item-list ul {
+.controls {
+  --grid-gap: 3vw;
+}
+
+.item-list__items {
   display: grid;
   grid-template-columns: 1fr repeat(2, auto);
-  gap: 2vw;
+  gap: var(--grid-gap);
   padding-left: 0;
 }
 
-.item-list li {
+.item-list__item {
   display: grid;
   grid-column: span 3;
   grid-template-columns: subgrid;
@@ -15,4 +19,30 @@
 
 .item-list button {
   @include button();
+}
+
+.add-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--grid-gap);
+  margin-bottom: var(--grid-gap);
+
+  input {
+    border-radius: 0;
+    border-width: 0 0 2px 0;
+
+    &::placeholder {
+      font-family: 'Inter', sans-serif;
+    }
+  }
+}
+
+.control-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--grid-gap);
+
+  button {
+    @include button();
+  }
 }

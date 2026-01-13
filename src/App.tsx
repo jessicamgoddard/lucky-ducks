@@ -83,29 +83,31 @@ export default function App() {
   const closeModal = () => setRevealedLabel(null);
 
   return (
-    <div className="app">
-      <h1 className="app__title">Random Picker</h1>
+    <div className="main">
+      <div className="container">
+        <h1 className="title">Random Picker</h1>
+
+        <div className="controls">
+          <ItemList
+            items={items}
+            onAdd={addItem}
+            onUpdate={updateItem}
+            onDelete={deleteItem}
+          />
+
+          <Controls
+            onClear={clearAll}
+            onShuffle={shuffleAssignments}
+          />
+        </div>
+      </div>
 
       <ItemTrack
         items={items}
         assignments={assignments}
         onRevealBySlot={handleRevealBySlot}
       />
-
-      <div className="app__controls">
-        <ItemList
-          items={items}
-          onAdd={addItem}
-          onUpdate={updateItem}
-          onDelete={deleteItem}
-        />
-
-        <Controls
-          onClear={clearAll}
-          onShuffle={shuffleAssignments}
-        />
-      </div>
-
+      
       <RevealModal
         label={revealedLabel}
         onClose={closeModal}

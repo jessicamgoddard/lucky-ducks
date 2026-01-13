@@ -60,9 +60,9 @@ export default function ItemList({ items, onAdd, onUpdate, onDelete }: Props) {
       </div>
 
       {/* List existing items */}
-      <ul>
+      <ul className="item-list__items">
         {items.map((item) => (
-          <li key={item.id}>
+          <li className="item-list__item" key={item.id}>
             {editingId === item.id ? (
               <>
                 <input
