@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Component to display items arranged in a circular track.
+ * Component to display items on a track.
  */
 export default function ItemTrack({ items, assignments, onRevealBySlot }: Props) {
   const slots = assignments.length;

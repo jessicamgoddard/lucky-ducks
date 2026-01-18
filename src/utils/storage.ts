@@ -2,8 +2,8 @@
  * A small wrapper for persistent storage with versioning.
  */
 
-const STORAGE_ITEMS_KEY = 'random-picker-items-v1';
-const STORAGE_ASSIGN_KEY = 'random-picker-assignments-v1';
+const STORAGE_ITEMS_KEY = 'random-picker-items';
+const STORAGE_ASSIGN_KEY = 'random-picker-assignments';
 
 export type PickerItem = {
   id: string;
