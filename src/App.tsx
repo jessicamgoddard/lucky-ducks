@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import ItemList from './components/ItemList';
-import Controls from './components/Controls';
 import ItemTrack from './components/ItemTrack';
 import RevealModal from './components/RevealModal';
 import {
@@ -91,13 +90,10 @@ export default function App() {
           <ItemList
             items={items}
             onAdd={addItem}
-            onUpdate={updateItem}
-            onDelete={deleteItem}
-          />
-
-          <Controls
             onClear={clearAll}
+            onDelete={deleteItem}
             onShuffle={shuffleAssignments}
+            onUpdate={updateItem}
           />
         </div>
       </div>

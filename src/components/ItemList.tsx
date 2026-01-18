@@ -6,14 +6,16 @@ import '../scss/components/_itemList.scss';
 type Props = {
   items: PickerItem[];
   onAdd: (label: string) => void;
-  onUpdate: (id: string, label: string) => void;
+  onClear: () => void;
   onDelete: (id: string) => void;
+  onShuffle: () => void;
+  onUpdate: (id: string, label: string) => void;
 };
 
 /**
  * Component to display and manage a list of items.
  */
-export default function ItemList({ items, onAdd, onUpdate, onDelete }: Props) {
+export default function ItemList({ items, onAdd, onClear, onDelete, onShuffle, onUpdate }: Props) {
   // Set up states for new item and editing
   const [newLabel, setNewLabel] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -36,10 +38,8 @@ export default function ItemList({ items, onAdd, onUpdate, onDelete }: Props) {
 
   return (
     <div className="item-list">
-      <h3>Items</h3>
-
       {/* Add new item */}
-      <div className="add-item">
+      <div className="item-list__add">
         <input
           type="text"
           placeholder="Add item..."
@@ -57,6 +57,11 @@ export default function ItemList({ items, onAdd, onUpdate, onDelete }: Props) {
         >
           Add
         </button>
+      </div>
+      
+      <div className="item-list__controls">
+        <button onClick={onShuffle}>Shuffle</button>
+        <button onClick={onClear}>Clear All</button>
       </div>
 
       {/* List existing items */}

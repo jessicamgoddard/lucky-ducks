@@ -1,8 +1,18 @@
+@mixin text-default {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
 @mixin button {
-  background-color: transparent;
+  @include text-default();
+
+  background-color: #cbe7fd;
+  border-color: #999;
   border-width: 1px;
   cursor: pointer;
-  padding: 1vw 4vw;
+  font-size: .75rem;
+  padding: 1cqw 4cqw;
   text-transform: uppercase;
   transition: background-color 0.3s ease, color 0.3s ease;
 
@@ -11,4 +21,13 @@
     background-color: #0f4a8a;
     color: #fff;
   }
+}
+
+@mixin button-text {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-transform: none;
 }

@@ -1,48 +1,90 @@
 @use '../mixins' as *;
 
 .controls {
-  --grid-gap: 3vw;
+  --grid-gap: 10px;
+  --grid-columns: 8;
+
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
 }
 
-.item-list__items {
+.item-list {
   display: grid;
-  grid-template-columns: 1fr repeat(2, auto);
-  gap: var(--grid-gap);
-  padding-left: 0;
-}
-
-.item-list__item {
-  display: grid;
-  grid-column: span 3;
+  grid-column: span var(--grid-columns);
   grid-template-columns: subgrid;
 }
 
-.item-list button {
-  @include button();
-}
-
-.add-item {
+.item-list__add {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-column: span var(--grid-columns);
   gap: var(--grid-gap);
-  margin-bottom: var(--grid-gap);
+  margin-block-end: var(--grid-gap);
+
+  @media (min-width: 600px) {
+    grid-template-columns: subgrid;
+  }
 
   input {
+    @include text-default();
+
     border-radius: 0;
     border-width: 0 0 2px 0;
 
+    @media (min-width: 600px) {
+      grid-column: span calc(var(--grid-columns) - 2);
+    }
+
     &::placeholder {
-      font-family: 'Inter', sans-serif;
+      @include text-default();
+    }
+  }
+
+  button {
+    background-color: #0f4a8a;
+    color: #fff;
+
+    @media (min-width: 600px) {
+      grid-column: span 2;
     }
   }
 }
 
-.control-bar {
+.item-list__controls {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-column: span var(--grid-columns);
+  grid-template-columns: subgrid;
   gap: var(--grid-gap);
+  margin-block-end: calc(var(--grid-gap) * 3);
 
   button {
     @include button();
+
+    grid-column: span calc(var(--grid-columns) / 2);
+  }
+}
+
+.item-list__items {
+  display: grid;
+  grid-column: span var(--grid-columns);
+  grid-gap: var(--grid-gap);
+  grid-template-columns: subgrid;
+  margin: 0;
+  padding-left: 0;
+}
+
+.item-list__item {
+  align-items: center;
+  display: grid;
+  grid-column: span var(--grid-columns);
+  grid-template-columns: subgrid;
+
+  span {
+    grid-column: span calc(var(--grid-columns) - 2);
+  }
+
+  button {
+    @include button-text();
+
+    text-align: right;
   }
 }
