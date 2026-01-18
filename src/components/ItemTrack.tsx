@@ -30,7 +30,7 @@ export default function ItemTrack({ items, assignments, onRevealBySlot }: Props)
             <Item
               key={`slot-${i}`}
               label={label ?? ''}
-              revealed={false} // reveal handled by modal; visually keep ? on items
+              revealed={false}
               onReveal={() => onRevealBySlot(i)}
               slot={i}
               totalSlots={slots}

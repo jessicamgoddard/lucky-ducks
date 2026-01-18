@@ -2,6 +2,10 @@
   bottom: 0;
   position: fixed;
   width: 100%;
+
+  .main:has(.item-list__items:empty) & {
+    display: none;
+  }
 }
 
 .item-track__track {
