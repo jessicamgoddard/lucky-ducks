@@ -4,26 +4,25 @@ This file provides guidance to Claude Code when working with code in this reposi
 
 ## Project
 
-Random Picker: a React 19 + TypeScript + Vite single-page app. The user enters a list of items, shuffles them into hidden "slots" shown as rubber ducks on a track, and clicks a duck to reveal the item in a modal. State persists in `localStorage`. See `README.md` for the to-do list (a11y audit, Jest tests, styling, confetti).
+Random Picker: a React 19 + TypeScript + Vite single-page app styled as a carnival duck pond. Enter options, press Start, then click a duck to reveal what it hides. Deployed to GitHub Pages at https://jessicamgoddard.github.io/random-picker/ (workflow in `.github/workflows/deploy.yml`, runs on push to `main`; Vite `base` is `/random-picker/`). See `README.md` for the to-do list.
 
 ## Commands
 
 - `npm run dev` — Vite dev server
 - `npm run build` — `tsc -b && vite build` (type-checks, then bundles to `dist/`)
 - `npm run lint` — ESLint (flat config in `eslint.config.js`)
+- `npm test` — Vitest (`vitest run`); tests sit next to the code as `*.test.ts`
 - `npm run preview` — serve the production build
-
-There is no test runner configured yet.
 
 ## Architecture
 
-- `src/App.tsx` owns all state: `items` (`PickerItem[]`), `assignments` (`(string | null)[]`, item id per slot, indexed by slot), and `revealedLabel`. Both `items` and `assignments` are saved to `localStorage` via `useEffect`. Child components are presentational and receive callbacks.
-- `ItemList` owns the add/edit/delete UI and its own Shuffle/Clear buttons (local state only: new label, editing id). `ItemTrack` renders one `Item` (a duck button) per slot, using `assignments.length` as the slot count; `RevealModal` shows the picked label.
-- `Controls.tsx` is currently unused (superseded by the buttons in `ItemList`).
-- Each `Item` picks its random animation timing once via `useState` initializers, so ducks keep their motion across re-renders.
-- `src/utils/assign.ts` — `randomAssign` shuffles item ids (Fisher-Yates) and places them in random slots; extra slots stay `null` (shown as "Nothing here" on reveal).
-- `src/utils/storage.ts` — versioned localStorage wrappers (`...-v1` keys); all reads/writes are try/catch-guarded. Bump the key suffix if the stored shape changes.
-- `src/utils/general.ts` — layout helpers (`getItemTop`, `getRandomNumber`) for positioning ducks on the track.
+- `src/App.tsx` owns all state: `items` (`PickerItem[]`, the options), `phase` (`'setup'` | `'pond'`), `ducks` (`Duck[]`), `editing` and `revealed`. Only `items` is saved to `localStorage`; the pond is never persisted, so a refresh returns to setup.
+- Setup shows `ItemList` and a Start button. The pond phase shows `ItemTrack`, plus an "Edit options" toggle that reveals `ItemList` so options can be added/removed mid-game (the pond is re-synced on every change).
+- `src/utils/pond.ts` is the pure game logic: one duck per option plus decoy ducks (`decoyCount`: about one per two options, min 1, max 5, none when there are no options). `syncPond` re-deals what the ducks hide, keeping duck ids stable and resizing the pond; picks and option changes both call it, so every pick is a fresh draw. Decoys reveal a random pun from `src/utils/puns.ts`. All ducks look identical.
+- `ItemTrack` renders one `Item` (a duck button) per duck, keyed by duck id. Each `Item` picks its random animation timing once via `useState` initializers. `RevealModal` shows the result (placeholder; planned to become an animated reveal with confetti).
+- `Controls.tsx` is unused (superseded by the buttons in `ItemList`).
+- `src/utils/storage.ts` — localStorage wrapper for items, try/catch-guarded.
+- `src/utils/general.ts` — layout helpers (`getItemTop`, `getRandomNumber`) for positioning ducks.
 
 ## Styling
 

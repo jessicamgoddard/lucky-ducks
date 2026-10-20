@@ -2,16 +2,10 @@ import { useState, useEffect } from 'react';
 import ItemList from './components/ItemList';
 import ItemTrack from './components/ItemTrack';
 import RevealModal from './components/RevealModal';
-import {
-  loadItems,
-  saveItems,
-  loadAssignments,
-  saveAssignments,
-  type PickerItem
-} from './utils/storage';
-import { randomAssign } from './utils/assign';
+import { loadItems, saveItems, type PickerItem } from './utils/storage';
+import { buildPond, revealDuck, syncPond, type Duck, type DuckContent } from './utils/pond';
 
-const DEFAULT_SLOTS = 3;
+type Phase = 'setup' | 'pond';
 
 /**
  * Main application component.
@@ -19,93 +13,113 @@ const DEFAULT_SLOTS = 3;
 export default function App() {
   // Set states
   const [items, setItems] = useState<PickerItem[]>(() => loadItems());
-  const [assignments, setAssignments] = useState<(string | null)[]>(
-    () => loadAssignments() ?? []
-  );
-  const [revealedLabel, setRevealedLabel] = useState<string | null>(null);
+  const [phase, setPhase] = useState<Phase>('setup');
+  const [ducks, setDucks] = useState<Duck[]>([]);
+  const [editing, setEditing] = useState(false);
+  const [revealed, setRevealed] = useState<DuckContent | null>(null);
 
-  // Save items on change
+  // Save items on change. The pond itself is never persisted.
   useEffect(() => {
-    // Save items to localStorage
     saveItems(items);
   }, [items]);
 
-  // Save assignments on change
-  useEffect(() => {
-    saveAssignments(assignments);
-  }, [assignments]);
+  // Apply a new options list and keep the pond in step with it
+  const commitItems = (next: PickerItem[]) => {
+    setItems(next);
+    if (phase === 'pond') {
+      setDucks((prev) => syncPond(prev, next));
+    }
+  };
 
   // Handlers for item operations
   const addItem = (label: string) => {
-    // Add a new item with a unique ID
-    setItems((prev) => [
-      ...prev,
-      { id: crypto.randomUUID(), label }
-    ]);
+    commitItems([...items, { id: crypto.randomUUID(), label }]);
   };
 
-  // Update an existing item
   const updateItem = (id: string, label: string) => {
-    // Update the label of the item with the given ID
-    setItems((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, label } : i))
-    );
+    commitItems(items.map((i) => (i.id === id ? { ...i, label } : i)));
   };
 
-  // Delete an item by ID
   const deleteItem = (id: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
-    // Also remove references in assignments
-    setAssignments((prev) => prev.map((a) => (a === id ? null : a)));
+    commitItems(items.filter((i) => i.id !== id));
   };
 
-  // Clear all items
   const clearAll = () => {
-    setItems([]);
-    setAssignments(Array.from({ length: DEFAULT_SLOTS }, () => null));
+    commitItems([]);
   };
 
-  // Shuffle assignments
-  const shuffleAssignments = () => {
-    const ids = items.map((i) => i.id);
-    const next = randomAssign(ids, items.length);
-    setAssignments(next);
+  // Start the game: fill the pond and show it
+  const startGame = () => {
+    setDucks(buildPond(items));
+    setEditing(false);
+    setPhase('pond');
   };
 
-  // Handle revealing an item by slot index
-  const handleRevealBySlot = (slotIndex: number) => {
-    const itemId = assignments[slotIndex];
-    const item = items.find((i) => i.id === itemId);
-    setRevealedLabel(item ? item.label : 'Nothing here');
+  // Go back to the setup screen
+  const backToSetup = () => {
+    setDucks([]);
+    setRevealed(null);
+    setPhase('setup');
   };
 
-  const closeModal = () => setRevealedLabel(null);
+  // Re-deal what the ducks hide
+  const reshuffle = () => {
+    setDucks((prev) => syncPond(prev, items));
+  };
+
+  // Handle a duck being picked. The pond is re-dealt so every pick is a fresh draw.
+  const handlePick = (duckId: string) => {
+    setRevealed(revealDuck(ducks, duckId));
+    reshuffle();
+  };
+
+  const closeModal = () => setRevealed(null);
+
+  const itemList = (
+    <div className="controls">
+      <ItemList
+        items={items}
+        onAdd={addItem}
+        onClear={clearAll}
+        onDelete={deleteItem}
+        onShuffle={reshuffle}
+        onUpdate={updateItem}
+      />
+    </div>
+  );
 
   return (
     <div className="main">
       <div className="container">
         <h1 className="title">Random Picker</h1>
 
-        <div className="controls">
-          <ItemList
-            items={items}
-            onAdd={addItem}
-            onClear={clearAll}
-            onDelete={deleteItem}
-            onShuffle={shuffleAssignments}
-            onUpdate={updateItem}
-          />
-        </div>
+        {phase === 'setup' ? (
+          <>
+            {itemList}
+            <div className="controls">
+              <button onClick={startGame} disabled={items.length === 0}>
+                Start
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="controls">
+              <button onClick={() => setEditing((e) => !e)}>
+                {editing ? 'Hide options' : 'Edit options'}
+              </button>
+              <button onClick={backToSetup}>Back to setup</button>
+            </div>
+            {editing && itemList}
+          </>
+        )}
       </div>
 
-      <ItemTrack
-        items={items}
-        assignments={assignments}
-        onRevealBySlot={handleRevealBySlot}
-      />
-      
+      {phase === 'pond' && <ItemTrack ducks={ducks} onPick={handlePick} />}
+
       <RevealModal
-        label={revealedLabel}
+        heading={revealed?.kind === 'decoy' ? 'Quack!' : 'You picked:'}
+        label={revealed ? (revealed.kind === 'option' ? revealed.label : revealed.pun) : null}
         onClose={closeModal}
       />
     </div>
