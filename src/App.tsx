@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ItemList from './components/ItemList';
 import ItemTrack from './components/ItemTrack';
-import RevealModal from './components/RevealModal';
+import Reveal from './components/Reveal';
 import { loadItems, saveItems, type PickerItem } from './utils/storage';
 import { buildPond, revealDuck, syncPond, type Duck, type DuckContent } from './utils/pond';
 
@@ -73,7 +73,7 @@ export default function App() {
     reshuffle();
   };
 
-  const closeModal = () => setRevealed(null);
+  const closeReveal = () => setRevealed(null);
 
   const itemList = (
     <div className="controls">
@@ -82,7 +82,6 @@ export default function App() {
         onAdd={addItem}
         onClear={clearAll}
         onDelete={deleteItem}
-        onShuffle={reshuffle}
         onUpdate={updateItem}
       />
     </div>
@@ -96,15 +95,16 @@ export default function App() {
         {phase === 'setup' ? (
           <>
             {itemList}
-            <div className="controls">
-              <button onClick={startGame} disabled={items.length === 0}>
+            <div className="actions">
+              <button className="button--primary" onClick={startGame} disabled={items.length === 0}>
                 Start
               </button>
             </div>
           </>
         ) : (
           <>
-            <div className="controls">
+            <div className="actions">
+              <button onClick={reshuffle}>Reshuffle</button>
               <button onClick={() => setEditing((e) => !e)}>
                 {editing ? 'Hide options' : 'Edit options'}
               </button>
@@ -117,10 +117,11 @@ export default function App() {
 
       {phase === 'pond' && <ItemTrack ducks={ducks} onPick={handlePick} />}
 
-      <RevealModal
+      <Reveal
         heading={revealed?.kind === 'decoy' ? 'Quack!' : 'You picked:'}
+        celebrate={revealed?.kind === 'option'}
         label={revealed ? (revealed.kind === 'option' ? revealed.label : revealed.pun) : null}
-        onClose={closeModal}
+        onClose={closeReveal}
       />
     </div>
   );
