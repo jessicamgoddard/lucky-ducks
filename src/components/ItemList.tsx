@@ -8,14 +8,13 @@ type Props = {
   onAdd: (label: string) => void;
   onClear: () => void;
   onDelete: (id: string) => void;
-  onShuffle: () => void;
   onUpdate: (id: string, label: string) => void;
 };
 
 /**
  * Component to display and manage a list of items.
  */
-export default function ItemList({ items, onAdd, onClear, onDelete, onShuffle, onUpdate }: Props) {
+export default function ItemList({ items, onAdd, onClear, onDelete, onUpdate }: Props) {
   // Set up states for new item and editing
   const [newLabel, setNewLabel] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -60,8 +59,7 @@ export default function ItemList({ items, onAdd, onClear, onDelete, onShuffle, o
       </div>
       
       <div className="item-list__controls">
-        <button onClick={onShuffle}>Shuffle</button>
-        <button onClick={onClear}>Clear All</button>
+        <button onClick={onClear} disabled={items.length === 0}>Clear All</button>
       </div>
 
       {/* List existing items */}
