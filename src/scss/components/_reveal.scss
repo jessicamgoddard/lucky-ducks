@@ -1,0 +1,105 @@
+@use '../mixins' as *;
+
+.reveal {
+  align-items: center;
+  animation: revealFade 0.25s ease both;
+  background: rgba(15, 74, 138, 0.55);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  overflow: hidden;
+  position: fixed;
+  z-index: 9999;
+}
+
+.reveal__dialog {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding-inline: 5vw;
+  position: relative;
+}
+
+// The duck pops up out of the water and gives a little flip
+.reveal__duck {
+  animation: revealDuck 0.8s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  position: relative;
+  width: 8rem;
+  z-index: 1;
+}
+
+// Label card slides out from behind the duck
+.reveal__card {
+  animation: revealCard 0.5s 0.35s ease-out both;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  margin-block-start: -1.5rem;
+  min-width: 16rem;
+  max-width: 28rem;
+  padding: 2rem 1.5rem 1.25rem;
+  text-align: center;
+
+  button {
+    @include button();
+  }
+}
+
+.reveal__heading {
+  font-size: 1rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.reveal__label {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0.5rem 0 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.reveal__confetti {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.reveal__confetti-piece {
+  animation: confettiFall var(--confetti-duration) var(--confetti-delay) ease-in both;
+  height: 14px;
+  left: 50%;
+  position: absolute;
+  top: 30%;
+  width: 8px;
+}
+
+@keyframes revealFade {
+  from { opacity: 0; }
+}
+
+@keyframes revealDuck {
+  0%   { transform: translateY(8rem) rotate(-30deg) scale(0.6); opacity: 0; }
+  60%  { transform: translateY(-1rem) rotate(10deg) scale(1.05); opacity: 1; }
+  100% { transform: translateY(0) rotate(0) scale(1); }
+}
+
+@keyframes revealCard {
+  from { opacity: 0; transform: translateY(-1.5rem) scale(0.9); }
+}
+
+@keyframes confettiFall {
+  0%   { opacity: 1; transform: translate(0, -20vh) rotate(0); }
+  100% { opacity: 0; transform: translate(var(--confetti-x), 80vh) rotate(var(--confetti-rotate)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal__duck,
+  .reveal__card {
+    animation: none;
+  }
+
+  .reveal__confetti {
+    display: none;
+  }
+}
