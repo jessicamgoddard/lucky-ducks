@@ -18,8 +18,9 @@ type Props = {
 export default function Item({ label, revealed, onReveal, slot, totalSlots }: Props) {
   const [travelDuration] = useState(() => getRandomNumber(5, 10));
   const [delay] = useState(() => getRandomNumber(0, 2));
-  const [top] = useState(() => getItemTop(slot, totalSlots));
   const [bobDuration] = useState(() => getRandomNumber(0.7, 1));
+  // Derived each render (not stored) so ducks re-space when the pond resizes
+  const top = getItemTop(slot, totalSlots);
   const style = {
     animationDelay: `${delay}s`,
     top: `${top}px`,

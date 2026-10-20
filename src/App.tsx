@@ -82,7 +82,6 @@ export default function App() {
         onAdd={addItem}
         onClear={clearAll}
         onDelete={deleteItem}
-        onShuffle={reshuffle}
         onUpdate={updateItem}
       />
     </div>
@@ -96,15 +95,16 @@ export default function App() {
         {phase === 'setup' ? (
           <>
             {itemList}
-            <div className="controls">
-              <button onClick={startGame} disabled={items.length === 0}>
+            <div className="actions">
+              <button className="button--primary" onClick={startGame} disabled={items.length === 0}>
                 Start
               </button>
             </div>
           </>
         ) : (
           <>
-            <div className="controls">
+            <div className="actions">
+              <button onClick={reshuffle}>Reshuffle</button>
               <button onClick={() => setEditing((e) => !e)}>
                 {editing ? 'Hide options' : 'Edit options'}
               </button>
