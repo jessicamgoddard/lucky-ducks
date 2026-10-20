@@ -22,11 +22,30 @@ body {
 }
 
 .title,
-.controls {
+.controls,
+.actions {
   padding-inline: 5vw;
 }
 
 .title {
   margin-block-end: 7cqw;
   text-align: center;
+}
+
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-block-end: 20px;
+}
+
+.button--primary {
+    background-color: #0f4a8a;
+    color: #fff;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
 }
