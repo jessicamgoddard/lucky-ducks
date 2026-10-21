@@ -82,6 +82,13 @@ body {
   text-align: center;
 }
 
+// On narrow screens the corner links would crowd the heading, so drop it below them
+@media (max-width: 40rem) {
+  .title {
+    padding-block-start: 2.5rem;
+  }
+}
+
 
 .subtitle {
   @include text-headline();
