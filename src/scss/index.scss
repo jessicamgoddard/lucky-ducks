@@ -40,7 +40,7 @@ body {
 // (100px) plus the edge's 10px lip and its height, and reserves room under the
 // content for the fixed pond.
 .main {
-  --edge-height: clamp(40px, 10dvh, 120px);
+  --edge-height: clamp(48px, 13dvh, 150px);
   --pond-height: calc(110px + var(--edge-height));
 }
 
