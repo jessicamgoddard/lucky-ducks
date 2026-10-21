@@ -22,6 +22,7 @@ export default function Item({ onReveal, slot, totalSlots }: Props) {
   const style = {
     animationDelay: `${delay}s`,
     top: `${top}px`,
+    ['--lane-top']: `${top}px`,
     ['--travel-duration']: `${travelDuration}s`,
     ['--bob-duration']: `${bobDuration}s`,
     // Where the duck sits when motion is turned off
@@ -34,6 +35,9 @@ export default function Item({ onReveal, slot, totalSlots }: Props) {
       style={style}
       onClick={onReveal}
       aria-label={`Duck ${slot + 1} of ${totalSlots}`}
-    />
+    >
+      {/* Water lapping over the base of the duck */}
+      <span className="item__water" aria-hidden />
+    </button>
   );
 }

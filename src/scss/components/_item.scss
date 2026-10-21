@@ -9,6 +9,7 @@
   padding: 0;
   position: absolute;
   top: 0;
+  transform-origin: 50% 85%;
   transition: top 0.4s ease;
   width: 90px;
 
@@ -51,43 +52,60 @@
     z-index: 1;
   }
 
+  // Ripples spreading out from where the duck meets the water
   &::after {
-    background: radial-gradient(
-      ellipse,
-      rgb(20, 40, 90) 0%,
-      rgb(20, 40, 90) 20%,
-      transparent 80%
-    );
-    bottom: -10%;
-    display: block;
-    height: 15%;
-    opacity: 1;
+    animation: itemRipple 2s ease-out infinite;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    height: 14px;
+    left: 8%;
     position: absolute;
-    transform-origin: center;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    width: 100%;
+    bottom: 2%;
+    width: 84%;
   }
 
-  &:hover {
-
-    &::before {
-      background-position: center -3px;
-      transform: scale(1.05);
-    }
-
-    &::after {
-      opacity: 0.6;
-      transform: scale(1.1);
-    }
+  &:hover::before {
+    background-position: center -3px;
+    transform: scale(1.05);
   }
+}
+
+// A wavy strip of translucent water over the bottom of the duck, so each duck
+// floats on the surface with only its base dipping in
+.item__water {
+  background: linear-gradient(
+    to bottom,
+    rgba(150, 215, 255, 0.45) 0%,
+    rgba(40, 140, 235, 0.6) 100%
+  );
+  bottom: 0;
+  height: 24%;
+  left: 0;
+  // Wavy top edge, intersected with a fade at the sides so there's no hard slab
+  mask-composite: intersect;
+  mask-image:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 20" preserveAspectRatio="none"><path d="M0,5 C15,0 30,9 45,4 C60,-1 75,8 90,4 L90,20 L0,20 Z" fill="white"/></svg>'),
+    linear-gradient(to right, transparent 0%, black 22%, black 78%, transparent 100%);
+  mask-size: 100% 100%;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
 }
 
 @keyframes itemTravel {
   100% { left: 100%; }
 }
 
+// Bob up and down with a slight rock, pivoting at the waterline
 @keyframes itemBob {
-  100% { transform: translateY(2px); }
+  0%   { transform: translateY(0) rotate(-3deg); }
+  100% { transform: translateY(2px) rotate(3deg); }
+}
+
+@keyframes itemRipple {
+  0%   { opacity: 0.9; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(1.3); }
 }
 
 // Global pause toggle
@@ -101,5 +119,10 @@
     animation: none;
     left: var(--rest-left);
     transform: translateX(-50%);
+
+    &::after {
+      animation: none;
+      opacity: 0.6;
+    }
   }
 }
