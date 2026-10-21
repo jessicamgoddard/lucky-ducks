@@ -73,18 +73,30 @@
 
 .item-list__item {
   align-items: center;
-  display: grid;
+  display: flex;
+  gap: .25rem;
   grid-column: span var(--grid-columns);
-  grid-template-columns: subgrid;
+
+  // The label (or rename field) takes the free space; buttons keep their natural
+  // width so their hover background always wraps their text
+  span,
+  input {
+    flex: 1;
+    min-width: 0;
+  }
 
   span {
-    grid-column: span calc(var(--grid-columns) - 2);
+    overflow-wrap: anywhere;
+  }
+
+  input {
+    @include text-default();
   }
 
   button {
     @include button-text();
 
-    text-align: right;
+    flex: none;
   }
 
   .item-list__delete {

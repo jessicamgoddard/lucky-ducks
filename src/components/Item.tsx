@@ -12,6 +12,10 @@ type Props = {
   totalSlots: number;
 };
 
+// Duck colours; each has a matching image and a [data-color] rule in _item.scss.
+// 'yellow' is the original duck. Each colour is equally likely.
+const DUCK_COLORS = ['yellow', 'pink', 'green', 'purple'];
+
 /**
  * Component to display a single duck.
  */
@@ -26,6 +30,8 @@ export default function Item({ onReveal, shuffleCount, slot, totalSlots }: Props
   // Stagger the hop so ducks don't all jump at once. A duck that joins after
   // some shuffles has nothing to react to until the next one.
   const [shuffleDelay] = useState(() => Math.random() * 0.35);
+  // Each duck keeps its own colour for as long as it's in the pond
+  const [color] = useState(() => DUCK_COLORS[Math.floor(Math.random() * DUCK_COLORS.length)]);
   const [mountedAtCount] = useState(shuffleCount);
   // Alternating a/b restarts the CSS animation on every shuffle
   const shuffleState = shuffleCount === mountedAtCount ? undefined : shuffleCount % 2 ? 'a' : 'b';
@@ -46,6 +52,7 @@ export default function Item({ onReveal, shuffleCount, slot, totalSlots }: Props
   return (
     <button
       className="item"
+      data-color={color}
       data-shuffle={shuffleState}
       style={style}
       onClick={onReveal}

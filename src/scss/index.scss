@@ -36,10 +36,12 @@ body {
   mask-image: linear-gradient(to bottom, black calc(100% - 50px), transparent 100%);
 }
 
-// Reserve space under the content for the fixed pond. --pond-height is the water
-// (100px) plus the front edge (see .item-track__edge:last-child).
+// The pond's front edge grows with the screen height. --pond-height is the water
+// (100px) plus the edge's 10px lip and its height, and reserves room under the
+// content for the fixed pond.
 .main {
-  --pond-height: 160px;
+  --edge-height: clamp(48px, 13dvh, 150px);
+  --pond-height: calc(110px + var(--edge-height));
 }
 
 .main--pond {
