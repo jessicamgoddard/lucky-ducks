@@ -54,7 +54,7 @@
 
   // Ripples spreading out from where the duck meets the water
   &::after {
-    animation: itemRipple 2s ease-out infinite;
+    animation: itemRipple var(--ripple-duration, 2s) var(--ripple-delay, 0s) ease-out infinite;
     border: 2px solid rgba(255, 255, 255, 0.8);
     border-radius: 50%;
     height: 14px;
