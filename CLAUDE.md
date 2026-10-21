@@ -17,7 +17,7 @@ Lucky Ducks: a React 19 + TypeScript + Vite single-page app styled as a carnival
 ## Architecture
 
 - `src/App.tsx` owns all state: `items` (`PickerItem[]`, the options), `phase` (`'setup'` | `'pond'`), `ducks` (`Duck[]`), `editing` and `revealed`. Only `items` is saved to `localStorage`; the pond is never persisted, so a refresh returns to setup.
-- Setup shows `ItemList` and a Start button. The pond phase shows `ItemTrack`, plus an action bar (Reshuffle, Edit options, Back to setup) that reveals `ItemList` so options can be added/removed mid-game (the pond is re-synced on every change).
+- Setup shows `ItemList` and a Start button. The pond phase shows `ItemTrack`, plus an action bar (Reshuffle, Pause ducks, Edit options, Back to setup). Edit options opens `OptionsModal` (a dialog around `ItemList`) so options can be added/removed mid-game; the pond is re-synced on every change.
 - `src/utils/pond.ts` is the pure game logic: one duck per option plus decoy ducks (`decoyCount`: about one per two options, min 1, max 5, none when there are no options). `syncPond` re-deals what the ducks hide, keeping duck ids stable and resizing the pond; picks and option changes both call it, so every pick is a fresh draw. Decoys reveal a random pun from `src/utils/puns.ts`. All ducks look identical.
 - `ItemTrack` renders one `Item` (a duck button) per duck, keyed by duck id. Each `Item` picks its random animation timing once via `useState` initializers. `Reveal` is the result overlay: a duck pops up and a label card appears; real options also fire a CSS-only confetti burst (no dependency). It moves focus to Close, closes on Escape/backdrop, restores focus, and honours `prefers-reduced-motion`.
 - `src/utils/storage.ts` — localStorage wrapper for items, try/catch-guarded.
@@ -27,7 +27,7 @@ Lucky Ducks: a React 19 + TypeScript + Vite single-page app styled as a carnival
 
 - Keep focus from being lost when the focused control is removed: `App` focuses the phase heading (`h2`, `tabIndex={-1}`) on setup/pond changes; `ItemList` returns focus to the row's Edit button after Save/Escape, and to the Add input after Delete/Clear.
 - State changes are announced through the `role="status"` live region in `App` (`announce()`).
-- Everything outside `Reveal` is `inert` while it is open (`<main inert>`), and `Reveal` also traps Tab on its Close button.
+- Everything outside `Reveal` or `OptionsModal` is `inert` while one is open (`<main inert>`). Both close on Escape and return focus to the opener; `Reveal` traps Tab on its Close button and `OptionsModal` cycles Tab through its controls.
 - Motion: ducks and waves pause on hover/focus and via the "Pause ducks" toggle (`.is-paused`), and `prefers-reduced-motion` stops all pond motion and rests ducks in their lanes (`--rest-left`).
 - Give new inputs and repeated buttons accessible names (e.g. `aria-label="Edit Alice"`). Buttons need a 24px minimum target.
 - Check with axe-core in Chrome against `npm run preview` (base path `/lucky-ducks/`).

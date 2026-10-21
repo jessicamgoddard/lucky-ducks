@@ -99,7 +99,11 @@ export default function ItemList({ items, onAdd, onClear, onDelete, onUpdate }: 
                   onChange={(e) => setEditValue(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') endEdit(true);
-                    if (e.key === 'Escape') endEdit(false);
+                    if (e.key === 'Escape') {
+                      // Only cancel the rename, not an enclosing dialog
+                      e.stopPropagation();
+                      endEdit(false);
+                    }
                   }}
                 />
                 <button onClick={() => endEdit(true)}>Save</button>

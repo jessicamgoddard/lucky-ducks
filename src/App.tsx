@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ItemList from './components/ItemList';
 import ItemTrack from './components/ItemTrack';
+import OptionsModal from './components/OptionsModal';
 import Reveal from './components/Reveal';
 import { loadItems, saveItems, type PickerItem } from './utils/storage';
 import { buildPond, revealDuck, syncPond, type Duck, type DuckContent } from './utils/pond';
@@ -119,8 +120,8 @@ export default function App() {
 
   return (
     <>
-      {/* Everything behind the reveal is inert while it is open */}
-      <main className={`main${phase === 'pond' ? ' main--pond' : ''}${paused ? ' is-paused' : ''}`} inert={revealed !== null}>
+      {/* Everything behind the reveal or the options dialog is inert while it is open */}
+      <main className={`main${phase === 'pond' ? ' main--pond' : ''}${paused ? ' is-paused' : ''}`} inert={revealed !== null || editing}>
         <div className={`container${phase === 'pond' ? ' container--pond' : ''}`}>
           <h1 className="title">Lucky Ducks</h1>
 
@@ -157,21 +158,19 @@ export default function App() {
                 <button onClick={() => setPaused((p) => !p)} aria-pressed={paused}>
                   Pause ducks
                 </button>
-                <button
-                  onClick={() => setEditing((e) => !e)}
-                  aria-expanded={editing}
-                >
+                <button onClick={() => setEditing(true)} aria-haspopup="dialog">
                   Edit options
                 </button>
                 <button onClick={backToSetup}>Back to setup</button>
               </div>
-              {editing && itemList}
             </>
           )}
         </div>
 
         {phase === 'pond' && <ItemTrack ducks={ducks} onPick={handlePick} />}
       </main>
+
+      {editing && <OptionsModal onClose={() => setEditing(false)}>{itemList}</OptionsModal>}
 
       <Reveal
         heading={revealed?.kind === 'decoy' ? 'Quack!' : 'You picked:'}
