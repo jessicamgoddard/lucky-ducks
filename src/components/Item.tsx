@@ -15,7 +15,8 @@ type Props = {
  */
 export default function Item({ onReveal, slot, totalSlots }: Props) {
   const [travelDuration] = useState(() => getRandomNumber(5, 10));
-  const [delay] = useState(() => getRandomNumber(0, 2));
+  // How far along its trip the duck starts, so ducks begin spread across the pond
+  const [startOffset] = useState(() => Math.random());
   const [bobDuration] = useState(() => getRandomNumber(0.7, 1));
   // Each duck's ripples run at their own pace and phase so they don't pulse in unison
   const [rippleDuration] = useState(() => 1.6 + Math.random() * 1.2);
@@ -23,12 +24,12 @@ export default function Item({ onReveal, slot, totalSlots }: Props) {
   // Derived each render (not stored) so ducks re-space when the pond resizes
   const top = getItemTop(slot, totalSlots);
   const style = {
-    animationDelay: `${delay}s`,
     top: `${top}px`,
     ['--travel-duration']: `${travelDuration}s`,
     ['--bob-duration']: `${bobDuration}s`,
     ['--ripple-duration']: `${rippleDuration}s`,
     ['--ripple-delay']: `${rippleDelay}s`,
+    ['--start-offset']: startOffset,
     // Where the duck sits when motion is turned off
     ['--rest-left']: `${((slot + 0.5) / totalSlots) * 100}%`,
   };
