@@ -98,7 +98,12 @@ export default function ItemList({ items, onAdd, onClear, onDelete, onUpdate }: 
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') endEdit(true);
+                    if (e.key === 'Enter') {
+                      // Focus moves to the Edit button when this ends; without this the
+                      // same Enter would then press that button and reopen the editor
+                      e.preventDefault();
+                      endEdit(true);
+                    }
                     if (e.key === 'Escape') {
                       // Only cancel the rename, not an enclosing dialog
                       e.stopPropagation();
