@@ -6,12 +6,13 @@ import '../scss/components/_itemTrack.scss';
 type Props = {
   ducks: Duck[];
   onPick: (duckId: string) => void;
+  shuffleCount: number;
 };
 
 /**
  * Component to display items on a track.
  */
-export default function ItemTrack({ ducks, onPick }: Props) {
+export default function ItemTrack({ ducks, onPick, shuffleCount }: Props) {
   const slots = ducks.length;
 
   return (
@@ -24,6 +25,7 @@ export default function ItemTrack({ ducks, onPick }: Props) {
           <Item
             key={duck.id}
             onReveal={() => onPick(duck.id)}
+            shuffleCount={shuffleCount}
             slot={i}
             totalSlots={slots}
           />

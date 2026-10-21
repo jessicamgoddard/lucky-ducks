@@ -33,12 +33,13 @@ export default function ItemList({ items, onAdd, onClear, onDelete, onUpdate }: 
     }
   }, [editingId]);
 
-  // Handle adding the new item
+  // Handle adding the new item, then return focus to the field for the next one
   const addItem = () => {
     if (newLabel.trim()) {
       onAdd(newLabel.trim());
       setNewLabel('');
     }
+    addInputRef.current?.focus();
   };
 
   // Handle editing an item
@@ -98,7 +99,11 @@ export default function ItemList({ items, onAdd, onClear, onDelete, onUpdate }: 
                   onChange={(e) => setEditValue(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') endEdit(true);
-                    if (e.key === 'Escape') endEdit(false);
+                    if (e.key === 'Escape') {
+                      // Only cancel the rename, not an enclosing dialog
+                      e.stopPropagation();
+                      endEdit(false);
+                    }
                   }}
                 />
                 <button onClick={() => endEdit(true)}>Save</button>
@@ -117,6 +122,7 @@ export default function ItemList({ items, onAdd, onClear, onDelete, onUpdate }: 
                   Edit
                 </button>
                 <button
+                  className="item-list__delete"
                   onClick={() => {
                     onDelete(item.id);
                     addInputRef.current?.focus();

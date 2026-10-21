@@ -4,33 +4,105 @@
   line-height: 1.2;
 }
 
+$button-blue: #0f4a8a;
+$button-blue-dark: #0a3563;
+$button-focus: #1671d1;
+
+// Shared focus ring for buttons
+@mixin button-focus {
+  &:focus-visible {
+    outline: 3px solid $button-focus;
+    outline-offset: 2px;
+  }
+}
+
+// Playful display face for headlines (loaded in index.html)
+@mixin text-headline {
+  font-family: 'Lilita One', 'Inter', sans-serif;
+  font-weight: 400;
+  letter-spacing: .01em;
+}
+
 @mixin button {
   @include text-default();
+  @include button-focus();
 
-  background-color: #cbe7fd;
-  border-color: #999;
-  border-width: 1px;
+  align-items: center;
+  background-color: #e3f1fe;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(15, 74, 138, .25);
+  color: $button-blue;
   cursor: pointer;
-  font-size: .875rem;
-  min-height: 2rem;
-  padding: 1cqw 4cqw;
-  text-transform: uppercase;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  display: inline-flex;
+  font-size: .9375rem;
+  font-weight: 600;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0 clamp(.75rem, 4cqw, 1.25rem);
+  transition: background-color .2s ease, box-shadow .2s ease, transform .2s ease;
 
-  &:hover,
-  &:focus {
-    background-color: #0f4a8a;
-    color: #fff;
+  &:hover:not(:disabled) {
+    background-color: #cbe7fd;
+    box-shadow: 0 4px 10px rgba(15, 74, 138, .25);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    box-shadow: 0 1px 2px rgba(15, 74, 138, .25);
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: .5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: background-color .2s ease;
+
+    &:hover:not(:disabled),
+    &:active:not(:disabled) {
+      transform: none;
+    }
+  }
+}
+
+// Filled call-to-action variant of the button above
+@mixin button-primary {
+  background-color: $button-blue;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background-color: $button-blue-dark;
+    box-shadow: 0 4px 10px rgba(15, 74, 138, .45);
   }
 }
 
 @mixin button-text {
+  @include text-default();
+  @include button-focus();
+
   background-color: transparent;
   border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  color: $button-blue;
   cursor: pointer;
-  min-height: 1.5rem;
-  min-width: 1.5rem;
-  padding: 0 .25rem;
-  text-decoration: underline;
+  font-size: .875rem;
+  font-weight: 600;
+  min-height: 1.75rem;
+  min-width: 1.75rem;
+  padding: 0 .5rem;
+  text-decoration: none;
   text-transform: none;
+  transition: background-color .2s ease;
+
+  // Matches the specificity of the shared button hover so it can override it
+  &:hover:not(:disabled),
+  &:active:not(:disabled) {
+    background-color: #e3f1fe;
+    box-shadow: none;
+    transform: none;
+  }
 }
