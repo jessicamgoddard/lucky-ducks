@@ -76,6 +76,13 @@
     background-position: center -3px;
     transform: scale(1.05);
   }
+
+  // Yellow is the default image above; the rest swap the body colours
+  @each $color in pink, green, purple {
+    &[data-color='#{$color}']::before {
+      background-image: url('../../assets/rubber-duck-#{$color}.svg');
+    }
+  }
 }
 
 // A wavy strip of translucent water over the bottom of the duck, so each duck
