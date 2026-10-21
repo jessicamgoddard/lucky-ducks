@@ -25,6 +25,8 @@ body {
 // Once the pond is showing, keep the content above it in its own scroll area
 .container--pond {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   // Leave room for the pond, but never collapse at high zoom or on short screens
   height: max(calc(100dvh - 210px), 16rem);
   overflow-x: hidden;
@@ -52,7 +54,7 @@ body {
   color: #0f4a8a;
   font-size: 2.75rem;
   line-height: 1;
-  margin-block-end: 7cqw;
+  margin-block-end: 1rem;
   text-align: center;
 }
 
@@ -67,6 +69,13 @@ body {
   &:focus {
     outline: none;
   }
+}
+
+// Pond instruction: pinned to the bottom of the content area, just above the ducks
+.subtitle--prompt {
+  font-size: 2.25rem;
+  margin-block: auto 0;
+  padding-block-start: 1.5rem;
 }
 
 .actions {

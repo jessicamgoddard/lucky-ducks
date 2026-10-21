@@ -145,7 +145,6 @@ export default function App() {
             </>
           ) : (
             <>
-              <h2 className="subtitle" tabIndex={-1} ref={phaseHeadingRef}>Pick a duck</h2>
               <div className="actions">
                 <button
                   onClick={() => {
@@ -155,14 +154,19 @@ export default function App() {
                 >
                   Reshuffle
                 </button>
-                <button onClick={() => setPaused((p) => !p)} aria-pressed={paused}>
-                  Pause ducks
+                {/* The label names the action, so no aria-pressed */}
+                <button onClick={() => setPaused((p) => !p)}>
+                  {paused ? 'Start ducks' : 'Pause ducks'}
                 </button>
                 <button onClick={() => setEditing(true)} aria-haspopup="dialog">
                   Edit options
                 </button>
                 <button onClick={backToSetup}>Back to setup</button>
               </div>
+              {/* The instruction sits at the bottom of the content, just above the ducks */}
+              <h2 className="subtitle subtitle--prompt" tabIndex={-1} ref={phaseHeadingRef}>
+                Pick a duck!
+              </h2>
             </>
           )}
         </div>

@@ -71,26 +71,37 @@
 }
 
 // A wavy strip of translucent water over the bottom of the duck, so each duck
-// floats on the surface with only its base dipping in
+// floats on the surface with only its base dipping in. The strip is masked by the
+// duck image itself (same size and position as .item::before), so it can't spill
+// past the duck's outline.
 .item__water {
   background: linear-gradient(
     to bottom,
     rgba(150, 215, 255, 0.45) 0%,
     rgba(40, 140, 235, 0.6) 100%
   );
-  bottom: 0;
-  height: 14%;
+  // The duck image sits 3px low, so reach 3px past the bottom of the box
+  bottom: -3px;
   left: 0;
-  // Wavy top edge, intersected with a fade at the sides so there's no hard slab
+  // Duck outline intersected with a wavy band along the bottom
   mask-composite: intersect;
   mask-image:
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 20" preserveAspectRatio="none"><path d="M0,5 C15,0 30,9 45,4 C60,-1 75,8 90,4 L90,20 L0,20 Z" fill="white"/></svg>'),
-    linear-gradient(to right, transparent 0%, black 22%, black 78%, transparent 100%);
-  mask-size: 100% 100%;
+    url('../../assets/rubber-duck-2.svg'),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 20" preserveAspectRatio="none"><path d="M0,5 C15,0 30,9 45,4 C60,-1 75,8 90,4 L90,20 L0,20 Z" fill="white"/></svg>');
+  mask-position: center 3px, 0 100%;
+  mask-repeat: no-repeat;
+  mask-size: auto calc(100% - 3px), 100% 14%;
   pointer-events: none;
   position: absolute;
+  top: 0;
+  transition: transform 0.3s ease;
   width: 100%;
   z-index: 2;
+}
+
+// Follow the duck's hover lift (see .item::before)
+.item:hover .item__water {
+  transform: translateY(-6px) scale(1.05);
 }
 
 @keyframes itemTravel {

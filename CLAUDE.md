@@ -28,7 +28,7 @@ Lucky Ducks: a React 19 + TypeScript + Vite single-page app styled as a carnival
 - Keep focus from being lost when the focused control is removed: `App` focuses the phase heading (`h2`, `tabIndex={-1}`) on setup/pond changes; `ItemList` returns focus to the row's Edit button after Save/Escape, and to the Add input after Delete/Clear.
 - State changes are announced through the `role="status"` live region in `App` (`announce()`).
 - Everything outside `Reveal` or `OptionsModal` is `inert` while one is open (`<main inert>`). Both close on Escape and return focus to the opener; `Reveal` traps Tab on its Close button and `OptionsModal` cycles Tab through its controls.
-- Motion: ducks and waves pause on hover/focus and via the "Pause ducks" toggle (`.is-paused`), and `prefers-reduced-motion` stops all pond motion and rests ducks in their lanes (`--rest-left`).
+- Motion: ducks and waves pause on hover/focus and via the "Pause ducks" / "Start ducks" toggle (`.is-paused`), and `prefers-reduced-motion` stops all pond motion and rests ducks in their lanes (`--rest-left`).
 - Give new inputs and repeated buttons accessible names (e.g. `aria-label="Edit Alice"`). Buttons need a 24px minimum target.
 - Check with axe-core in Chrome against `npm run preview` (base path `/lucky-ducks/`).
 
