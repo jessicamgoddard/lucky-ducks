@@ -51,7 +51,7 @@
 }
 
 .item-track__edge:last-child {
-  height: 50px;
+  height: var(--edge-height);
   position: relative;
   z-index: 2;
 }
