@@ -3,6 +3,8 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import '../scss/components/_optionsModal.scss';
 
 type Props = {
+  // Dialog title; defaults to the options editor
+  heading?: string;
   onClose: () => void;
   children: ReactNode;
 };
@@ -10,9 +12,10 @@ type Props = {
 const FOCUSABLE = 'button:not(:disabled), input:not(:disabled), [href], [tabindex]:not([tabindex="-1"])';
 
 /**
- * Dialog for editing the options while the ducks are in the pond.
+ * Dialog for editing the options while the ducks are in the pond. Also used
+ * for the settings panel, via the heading prop.
  */
-export default function OptionsModal({ onClose, children }: Props) {
+export default function OptionsModal({ heading = 'Edit options', onClose, children }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
 
   // Move focus into the dialog and hand it back to the opener on exit
@@ -64,7 +67,7 @@ export default function OptionsModal({ onClose, children }: Props) {
             <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
         </button>
-        <h2 className="options-modal__heading" id="options-modal-heading">Edit options</h2>
+        <h2 className="options-modal__heading" id="options-modal-heading">{heading}</h2>
         {children}
         <div className="options-modal__footer">
           <button className="button--primary" onClick={onClose}>Done</button>

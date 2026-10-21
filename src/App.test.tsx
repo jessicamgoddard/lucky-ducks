@@ -1,8 +1,12 @@
 // @vitest-environment jsdom
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
+import { playPickSound } from './utils/sound';
+
+// No real audio in tests; just record the calls
+vi.mock('./utils/sound', () => ({ playPickSound: vi.fn() }));
 
 const KEY = 'random-picker-items';
 
@@ -16,7 +20,10 @@ function setup(labels: string[] = ['Alice', 'Bob']) {
 const main = () => document.querySelector('main') as HTMLElement;
 const status = () => screen.getByRole('status').textContent?.split(String.fromCharCode(160)).join('');
 
-beforeEach(() => localStorage.clear());
+beforeEach(() => {
+  localStorage.clear();
+  vi.mocked(playPickSound).mockClear();
+});
 afterEach(cleanup);
 
 describe('App', () => {
@@ -64,6 +71,40 @@ describe('App', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(main().hasAttribute('inert')).toBe(false);
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Duck 1 of 3' }));
+  });
+
+  it('plays the matching sound when a duck is picked', async () => {
+    const user = setup();
+    await user.click(screen.getByRole('button', { name: 'Start' }));
+    await user.click(screen.getByRole('button', { name: 'Duck 1 of 3' }));
+    expect(playPickSound).toHaveBeenCalledTimes(1);
+    // A real option squeaks, a decoy quacks
+    const heading = within(screen.getByRole('dialog')).getByRole('heading').textContent;
+    expect(vi.mocked(playPickSound).mock.calls[0][0]).toBe(heading === 'Quack!' ? 'dud' : 'success');
+  });
+
+  it('opens settings, stays quiet with sounds off, and remembers the choice', async () => {
+    const user = setup();
+    await user.click(screen.getByRole('button', { name: 'Start' }));
+    await user.click(screen.getByRole('button', { name: 'Settings' }));
+    expect(main().hasAttribute('inert')).toBe(true);
+    await user.click(screen.getByRole('checkbox', { name: /Sounds/ }));
+    expect(JSON.parse(localStorage.getItem('random-picker-settings') ?? '{}').sounds).toBe(false);
+    await user.click(screen.getByRole('button', { name: 'Done' }));
+    expect(main().hasAttribute('inert')).toBe(false);
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Settings' }));
+    await user.click(screen.getByRole('button', { name: 'Duck 1 of 3' }));
+    expect(playPickSound).not.toHaveBeenCalled();
+  });
+
+  it('removes the decoys from the pond when they are switched off', async () => {
+    const user = setup();
+    await user.click(screen.getByRole('button', { name: 'Start' }));
+    expect(screen.getAllByRole('button', { name: /^Duck \d of 3$/ })).toHaveLength(3);
+    await user.click(screen.getByRole('button', { name: 'Settings' }));
+    await user.click(screen.getByRole('checkbox', { name: /Decoy ducks/ }));
+    await user.click(screen.getByRole('button', { name: 'Done' }));
+    expect(screen.getAllByRole('button', { name: /^Duck \d of 2$/ })).toHaveLength(2);
   });
 
   it('edits options in a modal mid-game and resizes the pond', async () => {

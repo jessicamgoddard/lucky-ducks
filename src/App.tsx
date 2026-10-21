@@ -3,8 +3,10 @@ import ItemList from './components/ItemList';
 import ItemTrack from './components/ItemTrack';
 import OptionsModal from './components/OptionsModal';
 import Reveal from './components/Reveal';
-import { loadItems, saveItems, type PickerItem } from './utils/storage';
+import Settings from './components/Settings';
+import { loadItems, loadSettings, saveItems, saveSettings, type PickerItem, type Settings as SettingsValues } from './utils/storage';
 import { buildPond, revealDuck, syncPond, type Duck, type DuckContent } from './utils/pond';
+import { playPickSound } from './utils/sound';
 
 type Phase = 'setup' | 'pond';
 
@@ -21,6 +23,9 @@ export default function App() {
   const [ducks, setDucks] = useState<Duck[]>([]);
   const [editing, setEditing] = useState(false);
   const [paused, setPaused] = useState(false);
+  // Preferences from the settings panel (sounds, decoys), saved between visits
+  const [settings, setSettings] = useState<SettingsValues>(() => loadSettings());
+  const [settingsOpen, setSettingsOpen] = useState(false);
   // Bumped on each manual reshuffle so the ducks can react, plus a brief button confirmation
   const [shuffleCount, setShuffleCount] = useState(0);
   const [justShuffled, setJustShuffled] = useState(false);
@@ -35,6 +40,11 @@ export default function App() {
   useEffect(() => {
     saveItems(items);
   }, [items]);
+
+  // Save settings on change
+  useEffect(() => {
+    saveSettings(settings);
+  }, [settings]);
 
   // Move focus to the new screen's heading when the phase changes, since the
   // button that was pressed has just been removed
@@ -59,7 +69,7 @@ export default function App() {
   const commitItems = (next: PickerItem[], message: string) => {
     setItems(next);
     if (phase === 'pond') {
-      setDucks((prev) => syncPond(prev, next));
+      setDucks((prev) => syncPond(prev, next, Math.random, settings.decoys));
     }
     announce(message);
   };
@@ -88,9 +98,17 @@ export default function App() {
 
   // Start the game: fill the pond and show it
   const startGame = () => {
-    setDucks(buildPond(items));
+    setDucks(buildPond(items, Math.random, settings.decoys));
     setEditing(false);
     setPhase('pond');
+  };
+
+  // Apply changed settings. Turning decoys on or off changes the pond, so re-deal it.
+  const changeSettings = (next: SettingsValues) => {
+    setSettings(next);
+    if (phase === 'pond' && next.decoys !== settings.decoys) {
+      setDucks((prev) => syncPond(prev, items, Math.random, next.decoys));
+    }
   };
 
   // Go back to the setup screen
@@ -103,7 +121,7 @@ export default function App() {
 
   // Re-deal what the ducks hide
   const reshuffle = () => {
-    setDucks((prev) => syncPond(prev, items));
+    setDucks((prev) => syncPond(prev, items, Math.random, settings.decoys));
   };
 
   // Reshuffle on request and make it visible: the ducks hop and the button confirms
@@ -118,7 +136,10 @@ export default function App() {
 
   // Handle a duck being picked. The pond is re-dealt so every pick is a fresh draw.
   const handlePick = (duckId: string) => {
-    setRevealed(revealDuck(ducks, duckId));
+    const content = revealDuck(ducks, duckId);
+    setRevealed(content);
+    // A squeak for a real option, a quack for a decoy
+    if (settings.sounds && content) playPickSound(content.kind === 'option' ? 'success' : 'dud');
     reshuffle();
   };
 
@@ -139,7 +160,17 @@ export default function App() {
   return (
     <>
       {/* Everything behind the reveal or the options dialog is inert while it is open */}
-      <main className={`main${phase === 'pond' ? ' main--pond' : ''}${paused ? ' is-paused' : ''}`} inert={revealed !== null || editing}>
+      <main className={`main${phase === 'pond' ? ' main--pond' : ''}${paused ? ' is-paused' : ''}`} inert={revealed !== null || editing || settingsOpen}>
+        {/* Buttons styled as plain links in the top corner: Settings opens a dialog, Back to setup leaves the pond */}
+        <div className="corner-links">
+          {phase === 'pond' && (
+            <button className="corner-links__link" onClick={backToSetup}>Back to setup</button>
+          )}
+          <button className="corner-links__link" onClick={() => setSettingsOpen(true)} aria-haspopup="dialog">
+            Settings
+          </button>
+        </div>
+
         <div className={`container${phase === 'pond' ? ' container--pond' : ''}`}>
           <h1 className="title">Lucky Ducks</h1>
 
@@ -174,7 +205,6 @@ export default function App() {
                 <button onClick={() => setEditing(true)} aria-haspopup="dialog">
                   Edit options
                 </button>
-                <button onClick={backToSetup}>Back to setup</button>
               </div>
               {/* The instruction sits at the bottom of the content, just above the ducks */}
               <h2 className="subtitle subtitle--prompt" tabIndex={-1} ref={phaseHeadingRef}>
@@ -188,6 +218,12 @@ export default function App() {
       </main>
 
       {editing && <OptionsModal onClose={() => setEditing(false)}>{itemList}</OptionsModal>}
+
+      {settingsOpen && (
+        <OptionsModal heading="Settings" onClose={() => setSettingsOpen(false)}>
+          <Settings settings={settings} onChange={changeSettings} />
+        </OptionsModal>
+      )}
 
       <Reveal
         heading={revealed?.kind === 'decoy' ? 'Quack!' : 'You picked:'}

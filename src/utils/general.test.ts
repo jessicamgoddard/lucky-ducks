@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { getItemTop } from './general';
+import { getItemTop, getRandomNumber } from './general';
+
+describe('getRandomNumber', () => {
+  it('stays within the range, including fractional ones', () => {
+    for (let i = 0; i < 200; i++) {
+      const n = getRandomNumber(0.7, 1);
+      expect(n).toBeGreaterThanOrEqual(0.7);
+      expect(n).toBeLessThan(1);
+    }
+  });
+});
 
 describe('getItemTop', () => {
   it('puts a lone duck at the top of the track', () => {
