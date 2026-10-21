@@ -70,6 +70,29 @@
   }
 }
 
+// A wavy strip of translucent water over the bottom of the duck, so each duck
+// floats on the surface with only its base dipping in
+.item__water {
+  background: linear-gradient(
+    to bottom,
+    rgba(150, 215, 255, 0.45) 0%,
+    rgba(40, 140, 235, 0.6) 100%
+  );
+  bottom: 0;
+  height: 14%;
+  left: 0;
+  // Wavy top edge, intersected with a fade at the sides so there's no hard slab
+  mask-composite: intersect;
+  mask-image:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 20" preserveAspectRatio="none"><path d="M0,5 C15,0 30,9 45,4 C60,-1 75,8 90,4 L90,20 L0,20 Z" fill="white"/></svg>'),
+    linear-gradient(to right, transparent 0%, black 22%, black 78%, transparent 100%);
+  mask-size: 100% 100%;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+}
+
 @keyframes itemTravel {
   100% { left: 100%; }
 }

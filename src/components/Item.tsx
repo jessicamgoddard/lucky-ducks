@@ -34,6 +34,9 @@ export default function Item({ onReveal, slot, totalSlots }: Props) {
       style={style}
       onClick={onReveal}
       aria-label={`Duck ${slot + 1} of ${totalSlots}`}
-    />
+    >
+      {/* Water lapping over the base of the duck */}
+      <span className="item__water" aria-hidden />
+    </button>
   );
 }
