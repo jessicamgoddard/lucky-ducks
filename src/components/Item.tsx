@@ -15,15 +15,16 @@ type Props = {
  */
 export default function Item({ onReveal, slot, totalSlots }: Props) {
   const [travelDuration] = useState(() => getRandomNumber(5, 10));
-  const [delay] = useState(() => getRandomNumber(0, 2));
+  // How far along its trip the duck starts, so ducks begin spread across the pond
+  const [startOffset] = useState(() => Math.random());
   const [bobDuration] = useState(() => getRandomNumber(0.7, 1));
   // Derived each render (not stored) so ducks re-space when the pond resizes
   const top = getItemTop(slot, totalSlots);
   const style = {
-    animationDelay: `${delay}s`,
     top: `${top}px`,
     ['--travel-duration']: `${travelDuration}s`,
     ['--bob-duration']: `${bobDuration}s`,
+    ['--start-offset']: startOffset,
     // Where the duck sits when motion is turned off
     ['--rest-left']: `${((slot + 0.5) / totalSlots) * 100}%`,
   };

@@ -1,6 +1,10 @@
 // Individual floating items
 .item {
+  --travel-scale: 1;
+
   animation: itemTravel var(--travel-duration) linear infinite, itemBob var(--bob-duration) linear infinite alternate;
+  // A negative delay starts the trip part-way through instead of at the left edge
+  animation-delay: calc(var(--start-offset) * var(--travel-duration) * var(--travel-scale) * -1);
   aspect-ratio: 1;
   background-color: transparent;
   border: 0;
@@ -13,11 +17,15 @@
   width: 90px;
 
   @media (min-width: 700px) {
-    animation-duration: calc(var(--travel-duration) * 2), var(--bob-duration);
+    --travel-scale: 2;
+
+    animation-duration: calc(var(--travel-duration) * var(--travel-scale)), var(--bob-duration);
   }
 
   @media (min-width: 1000px) {
-    animation-duration: calc(var(--travel-duration) * 3), var(--bob-duration);
+    --travel-scale: 3;
+
+    animation-duration: calc(var(--travel-duration) * var(--travel-scale)), var(--bob-duration);
   }
 
   // Stop a duck while it's being pointed at or focused so it's easy to hit
