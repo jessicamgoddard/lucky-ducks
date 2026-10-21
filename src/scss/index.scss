@@ -10,18 +10,43 @@ body {
   @include button();
 }
 
+// Needs the .container prefix to beat the shared button styles above
+.container .button--primary {
+  background-color: #0f4a8a;
+  color: #fff;
+
+  &:hover,
+  &:focus-visible {
+    background-color: #0a3563;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
 .container {
   container-type: inline-size;
-  height: calc(100vh - 210px);
+  // Leave room for the pond, but never collapse at high zoom or on short screens
+  height: max(calc(100dvh - 210px), 16rem);
   overflow-x: hidden;
   overflow-y: scroll;
   max-width: 40rem;
   margin-inline: auto;
   position: relative;
+  // Let the last item scroll clear of the fade at the bottom
+  padding-block-end: 50px;
   mask-image: linear-gradient(to bottom, black calc(100% - 50px), transparent 100%);
 }
 
+// Reserve space under the content for the fixed pond
+.main {
+  padding-block-end: 210px;
+}
+
 .title,
+.subtitle,
 .controls,
 .actions {
   padding-inline: 5vw;
@@ -33,19 +58,37 @@ body {
 }
 
 
-.actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-block-end: 20px;
+.subtitle {
+  font-size: 1.25rem;
+  margin-block: 0 1rem;
+  text-align: center;
+
+  &:focus {
+    outline: none;
+  }
 }
 
-.button--primary {
-    background-color: #0f4a8a;
-    color: #fff;
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-block-end: 20px;
+}
 
-    &:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-    }
+.hint {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.visually-hidden {
+  border: 0;
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

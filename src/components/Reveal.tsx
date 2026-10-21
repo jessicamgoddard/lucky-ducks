@@ -58,6 +58,11 @@ function RevealCard({ heading, label, celebrate, onClose }: CardProps) {
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onCloseRef.current();
+      // Close is the only control, so keep focus on it
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        closeRef.current?.focus();
+      }
     };
     document.addEventListener('keydown', onKeyDown);
 
