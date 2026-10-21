@@ -42,13 +42,20 @@ body {
 }
 
 .title {
+  @include text-headline();
+
+  color: #0f4a8a;
+  font-size: 2.75rem;
+  line-height: 1;
   margin-block-end: 7cqw;
   text-align: center;
 }
 
 
 .subtitle {
-  font-size: 1.25rem;
+  @include text-headline();
+
+  font-size: 1.5rem;
   margin-block: 0 1rem;
   text-align: center;
 

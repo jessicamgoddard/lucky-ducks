@@ -46,9 +46,10 @@
 }
 
 .reveal__heading {
-  font-size: 1rem;
+  @include text-headline();
+
+  font-size: 1.5rem;
   margin: 0;
-  text-transform: uppercase;
 }
 
 .reveal__label {

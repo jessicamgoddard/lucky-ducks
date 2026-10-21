@@ -16,6 +16,13 @@ $button-focus: #1671d1;
   }
 }
 
+// Playful display face for headlines (loaded in index.html)
+@mixin text-headline {
+  font-family: 'Lilita One', 'Inter', sans-serif;
+  font-weight: 400;
+  letter-spacing: .01em;
+}
+
 @mixin button {
   @include text-default();
   @include button-focus();
