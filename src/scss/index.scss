@@ -87,6 +87,13 @@ body {
   margin-block-end: 20px;
 }
 
+// On setup (no ducks showing) keep the options list from stretching too wide
+.container:not(.container--pond) .controls {
+  box-sizing: border-box;
+  margin-inline: auto;
+  max-width: 1200px;
+}
+
 // On setup the actions follow the option list
 .controls + .actions {
   margin-block-start: 1.5rem;
