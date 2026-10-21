@@ -54,3 +54,13 @@
   0%   { mask-position: 0 0; }
   100% { mask-position: 200px 0; }
 }
+
+.is-paused .item-track__track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item-track__track {
+    animation: none;
+  }
+}

@@ -20,6 +20,19 @@
     animation-duration: calc(var(--travel-duration) * 3), var(--bob-duration);
   }
 
+  // Stop a duck while it's being pointed at or focused so it's easy to hit
+  &:hover,
+  &:focus-visible {
+    animation-play-state: paused;
+    z-index: 2;
+  }
+
+  &:focus-visible {
+    border-radius: 8px;
+    outline: 3px solid #0f4a8a;
+    outline-offset: 2px;
+  }
+
   &::before,
   &::after {
     content: '';
@@ -75,4 +88,18 @@
 
 @keyframes itemBob {
   100% { transform: translateY(2px); }
+}
+
+// Global pause toggle
+.is-paused .item {
+  animation-play-state: paused;
+}
+
+// No travelling or bobbing; ducks rest in their lanes instead
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    animation: none;
+    left: var(--rest-left);
+    transform: translateX(-50%);
+  }
 }

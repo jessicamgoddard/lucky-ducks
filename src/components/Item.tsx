@@ -5,17 +5,15 @@ import { getRandomNumber, getItemTop } from '../utils/general';
 import '../scss/components/_item.scss';
 
 type Props = {
-  label: string;
-  revealed: boolean;
   onReveal: () => void;
   slot: number;
   totalSlots: number;
 };
 
 /**
- * Component to display a single item.
+ * Component to display a single duck.
  */
-export default function Item({ label, revealed, onReveal, slot, totalSlots }: Props) {
+export default function Item({ onReveal, slot, totalSlots }: Props) {
   const [travelDuration] = useState(() => getRandomNumber(5, 10));
   const [delay] = useState(() => getRandomNumber(0, 2));
   const [bobDuration] = useState(() => getRandomNumber(0.7, 1));
@@ -26,15 +24,16 @@ export default function Item({ label, revealed, onReveal, slot, totalSlots }: Pr
     top: `${top}px`,
     ['--travel-duration']: `${travelDuration}s`,
     ['--bob-duration']: `${bobDuration}s`,
+    // Where the duck sits when motion is turned off
+    ['--rest-left']: `${((slot + 0.5) / totalSlots) * 100}%`,
   };
-  
+
   return (
     <button
       className="item"
       style={style}
       onClick={onReveal}
-      title="Click to reveal"
-      aria-label={revealed ? `Revealed: ${label}` : 'Hidden item — click to reveal'}
+      aria-label={`Duck ${slot + 1} of ${totalSlots}`}
     />
   );
 }
