@@ -112,6 +112,30 @@
   transform: translateY(-6px) scale(1.05);
 }
 
+// Reshuffle feedback: each duck hops and wiggles. The duck image and its water strip
+// animate together; the a/b copies let the animation restart on every shuffle.
+@each $name in a, b {
+  .item[data-shuffle='#{$name}']::before,
+  .item[data-shuffle='#{$name}'] .item__water {
+    animation: itemShuffle-#{$name} 0.8s var(--shuffle-delay, 0s) ease-in-out;
+  }
+}
+
+@mixin shuffle-keyframes {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  25%      { transform: translateY(-18px) rotate(-14deg); }
+  50%      { transform: translateY(-6px) rotate(10deg); }
+  75%      { transform: translateY(-12px) rotate(-6deg); }
+}
+
+@keyframes itemShuffle-a {
+  @include shuffle-keyframes;
+}
+
+@keyframes itemShuffle-b {
+  @include shuffle-keyframes;
+}
+
 @keyframes itemTravel {
   100% { left: 100%; }
 }
@@ -142,6 +166,12 @@
     &::after {
       animation: none;
       opacity: 0.6;
+    }
+
+    // No hop; the "Shuffled!" button label and screen reader message still confirm it
+    &::before,
+    .item__water {
+      animation: none;
     }
   }
 }

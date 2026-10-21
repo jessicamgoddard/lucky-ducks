@@ -59,6 +59,11 @@ export default function OptionsModal({ onClose, children }: Props) {
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
+        <button className="options-modal__close" onClick={onClose} aria-label="Close">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden focusable="false">
+            <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+        </button>
         <h2 className="options-modal__heading" id="options-modal-heading">Edit options</h2>
         {children}
         <div className="options-modal__footer">

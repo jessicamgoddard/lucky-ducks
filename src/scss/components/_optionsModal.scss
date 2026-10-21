@@ -21,6 +21,7 @@
   max-width: 32rem;
   overflow-y: auto;
   padding: 1.5rem 1rem;
+  position: relative;
   width: 100%;
 
   // :where() keeps these as defaults that the list's own button styles can override
@@ -31,6 +32,21 @@
   .button--primary {
     @include button-primary();
   }
+}
+
+.options-modal__close {
+  @include button-text();
+
+  align-items: center;
+  border-radius: 50%;
+  display: inline-flex;
+  height: 2.5rem;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  right: .75rem;
+  top: .75rem;
+  width: 2.5rem;
 }
 
 .options-modal__heading {

@@ -21,11 +21,15 @@ export default function App() {
   const [ducks, setDucks] = useState<Duck[]>([]);
   const [editing, setEditing] = useState(false);
   const [paused, setPaused] = useState(false);
+  // Bumped on each manual reshuffle so the ducks can react, plus a brief button confirmation
+  const [shuffleCount, setShuffleCount] = useState(0);
+  const [justShuffled, setJustShuffled] = useState(false);
   const [revealed, setRevealed] = useState<DuckContent | null>(null);
   const [announcement, setAnnouncement] = useState('');
 
   const phaseHeadingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
+  const shuffleTimer = useRef<number>(undefined);
 
   // Save items on change. The pond itself is never persisted.
   useEffect(() => {
@@ -41,6 +45,9 @@ export default function App() {
     }
     phaseHeadingRef.current?.focus();
   }, [phase]);
+
+  // Don't leave a pending timer behind if the app unmounts
+  useEffect(() => () => window.clearTimeout(shuffleTimer.current), []);
 
   // Announce a message to screen readers. Repeating the same message appends a
   // non-breaking space so it is read again.
@@ -90,12 +97,23 @@ export default function App() {
   const backToSetup = () => {
     setDucks([]);
     setRevealed(null);
+    setShuffleCount(0);
     setPhase('setup');
   };
 
   // Re-deal what the ducks hide
   const reshuffle = () => {
     setDucks((prev) => syncPond(prev, items));
+  };
+
+  // Reshuffle on request and make it visible: the ducks hop and the button confirms
+  const handleReshuffle = () => {
+    reshuffle();
+    setShuffleCount((c) => c + 1);
+    announce('Ducks reshuffled.');
+    setJustShuffled(true);
+    window.clearTimeout(shuffleTimer.current);
+    shuffleTimer.current = window.setTimeout(() => setJustShuffled(false), 1500);
   };
 
   // Handle a duck being picked. The pond is re-dealt so every pick is a fresh draw.
@@ -146,13 +164,8 @@ export default function App() {
           ) : (
             <>
               <div className="actions">
-                <button
-                  onClick={() => {
-                    reshuffle();
-                    announce('Ducks reshuffled.');
-                  }}
-                >
-                  Reshuffle
+                <button onClick={handleReshuffle}>
+                  {justShuffled ? 'Shuffled!' : 'Reshuffle'}
                 </button>
                 {/* The label names the action, so no aria-pressed */}
                 <button onClick={() => setPaused((p) => !p)}>
@@ -171,7 +184,7 @@ export default function App() {
           )}
         </div>
 
-        {phase === 'pond' && <ItemTrack ducks={ducks} onPick={handlePick} />}
+        {phase === 'pond' && <ItemTrack ducks={ducks} onPick={handlePick} shuffleCount={shuffleCount} />}
       </main>
 
       {editing && <OptionsModal onClose={() => setEditing(false)}>{itemList}</OptionsModal>}
