@@ -120,8 +120,8 @@ export default function App() {
   return (
     <>
       {/* Everything behind the reveal is inert while it is open */}
-      <main className={`main${paused ? ' is-paused' : ''}`} inert={revealed !== null}>
-        <div className="container">
+      <main className={`main${phase === 'pond' ? ' main--pond' : ''}${paused ? ' is-paused' : ''}`} inert={revealed !== null}>
+        <div className={`container${phase === 'pond' ? ' container--pond' : ''}`}>
           <h1 className="title">Random Picker</h1>
 
           {phase === 'setup' ? (

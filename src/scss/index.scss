@@ -17,20 +17,26 @@ body {
 
 .container {
   container-type: inline-size;
+  max-width: 40rem;
+  margin-inline: auto;
+  padding-block-end: 2rem;
+  position: relative;
+}
+
+// Once the pond is showing, keep the content above it in its own scroll area
+.container--pond {
+  box-sizing: border-box;
   // Leave room for the pond, but never collapse at high zoom or on short screens
   height: max(calc(100dvh - 210px), 16rem);
   overflow-x: hidden;
   overflow-y: scroll;
-  max-width: 40rem;
-  margin-inline: auto;
-  position: relative;
   // Let the last item scroll clear of the fade at the bottom
   padding-block-end: 50px;
   mask-image: linear-gradient(to bottom, black calc(100% - 50px), transparent 100%);
 }
 
 // Reserve space under the content for the fixed pond
-.main {
+.main--pond {
   padding-block-end: 210px;
 }
 
