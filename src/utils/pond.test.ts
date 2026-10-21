@@ -48,6 +48,13 @@ describe('buildPond', () => {
     expect(ducks.filter((d) => d.content.kind === 'decoy')).toHaveLength(decoyCount(4));
   });
 
+  it('has only the options when decoys are off', () => {
+    const items = makeItems(4);
+    const ducks = buildPond(items, Math.random, false);
+    expect(ducks).toHaveLength(4);
+    expect(ducks.some((d) => d.content.kind === 'decoy')).toBe(false);
+  });
+
   it('gives every duck a unique id', () => {
     const ducks = buildPond(makeItems(8));
     expect(new Set(ducks.map((d) => d.id)).size).toBe(ducks.length);

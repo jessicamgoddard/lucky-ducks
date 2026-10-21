@@ -43,15 +43,16 @@ export function shuffle<T>(list: T[], rng: Rng = Math.random): T[] {
 }
 
 /**
- * Build the list of things the ducks hide: every option plus the decoys.
+ * Build the list of things the ducks hide: every option plus the decoys
+ * (unless decoys are switched off).
  */
-function buildContents(items: PickerItem[], rng: Rng): DuckContent[] {
+function buildContents(items: PickerItem[], rng: Rng, withDecoys: boolean): DuckContent[] {
   const options: DuckContent[] = items.map((item) => ({
     kind: 'option',
     optionId: item.id,
     label: item.label,
   }));
-  const decoys: DuckContent[] = Array.from({ length: decoyCount(items.length) }, () => ({
+  const decoys: DuckContent[] = Array.from({ length: withDecoys ? decoyCount(items.length) : 0 }, () => ({
     kind: 'decoy',
     pun: PUNS[Math.floor(rng() * PUNS.length)],
   }));
@@ -61,8 +62,8 @@ function buildContents(items: PickerItem[], rng: Rng): DuckContent[] {
 /**
  * Create a pond with one duck per option plus decoys, contents shuffled.
  */
-export function buildPond(items: PickerItem[], rng: Rng = Math.random): Duck[] {
-  return syncPond([], items, rng);
+export function buildPond(items: PickerItem[], rng: Rng = Math.random, withDecoys = true): Duck[] {
+  return syncPond([], items, rng, withDecoys);
 }
 
 /**
@@ -70,8 +71,8 @@ export function buildPond(items: PickerItem[], rng: Rng = Math.random): Duck[] {
  * when the options change. Existing ducks keep their ids; the pond is resized to match the options
  * (new ducks are added, surplus ducks are removed from the end).
  */
-export function syncPond(ducks: Duck[], items: PickerItem[], rng: Rng = Math.random): Duck[] {
-  const contents = shuffle(buildContents(items, rng), rng);
+export function syncPond(ducks: Duck[], items: PickerItem[], rng: Rng = Math.random, withDecoys = true): Duck[] {
+  const contents = shuffle(buildContents(items, rng, withDecoys), rng);
   return contents.map((content, i) => ({
     id: ducks[i]?.id ?? crypto.randomUUID(),
     content,

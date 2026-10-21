@@ -16,11 +16,12 @@ Lucky Ducks: a React 19 + TypeScript + Vite single-page app styled as a carnival
 
 ## Architecture
 
-- `src/App.tsx` owns all state: `items` (`PickerItem[]`, the options), `phase` (`'setup'` | `'pond'`), `ducks` (`Duck[]`), `editing` and `revealed`. Only `items` is saved to `localStorage`; the pond is never persisted, so a refresh returns to setup.
-- Setup shows `ItemList` and a Start button. The pond phase shows `ItemTrack`, plus an action bar (Reshuffle, Pause ducks, Edit options, Back to setup). Edit options opens `OptionsModal` (a dialog around `ItemList`) so options can be added/removed mid-game; the pond is re-synced on every change.
+- `src/App.tsx` owns all state: `items` (`PickerItem[]`, the options), `phase` (`'setup'` | `'pond'`), `ducks` (`Duck[]`), `editing`, `settings`, `settingsOpen` and `revealed`. Only `items` and `settings` are saved to `localStorage`; the pond is never persisted, so a refresh returns to setup.
+- Setup shows `ItemList` and a Start button. The pond phase shows `ItemTrack`, plus an action bar (Reshuffle, Pause ducks, Edit options). Settings and Back to setup (pond only) are buttons styled as plain links in the top-right corner (`.corner-links`). Settings (sounds on/off, decoys on/off) opens in `OptionsModal` with a `heading` prop, around `Settings`; switching decoys re-deals the pond. Edit options opens `OptionsModal` (a dialog around `ItemList`) so options can be added/removed mid-game; the pond is re-synced on every change.
 - `src/utils/pond.ts` is the pure game logic: one duck per option plus decoy ducks (`decoyCount`: about one per two options, min 1, max 5, none when there are no options). `syncPond` re-deals what the ducks hide, keeping duck ids stable and resizing the pond; picks and option changes both call it, so every pick is a fresh draw. Decoys reveal a random pun from `src/utils/puns.ts`. All ducks look identical.
 - `ItemTrack` renders one `Item` (a duck button) per duck, keyed by duck id. Each `Item` picks its random animation timing once via `useState` initializers. `Reveal` is the result overlay: a duck pops up and a label card appears; real options also fire a CSS-only confetti burst (no dependency). It moves focus to Close, closes on Escape/backdrop, restores focus, and honours `prefers-reduced-motion`.
 - `src/utils/storage.ts` — localStorage wrapper for items, try/catch-guarded; saved data is shape-checked so a corrupt value can't crash the app.
+- `src/utils/sound.ts` — `playPickSound` plays an audio file from `src/assets` when a duck is picked: `duck-squeak.m4a` for a real option (`success`), `duck-quack.mp3` for a decoy (`dud`). `App` skips it when the Sounds setting is off. Playback failures are swallowed.
 - `src/utils/general.ts` — layout helpers (`getItemTop`, `getRandomNumber`) for positioning ducks.
 
 ## Accessibility

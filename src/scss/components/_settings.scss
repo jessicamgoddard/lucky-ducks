@@ -1,0 +1,28 @@
+@use '../mixins' as *;
+
+.settings {
+  display: grid;
+  gap: 1rem;
+}
+
+.settings__row {
+  @include text-default();
+
+  align-items: flex-start;
+  cursor: pointer;
+  display: flex;
+  gap: .75rem;
+
+  input {
+    flex: none;
+    height: 1.5rem;
+    margin: 0;
+    width: 1.5rem;
+  }
+}
+
+.settings__hint {
+  display: block;
+  font-size: .875rem;
+  opacity: .75;
+}

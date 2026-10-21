@@ -1,8 +1,8 @@
 /**
- * Generate a random number between min and max (inclusive).
+ * Generate a random number from min up to (but not including) max.
  */
 export function getRandomNumber(min: number, max: number) {
-  return Math.random() * (max - min + 1) + min;
+  return Math.random() * (max - min) + min;
 }
 
 /**
