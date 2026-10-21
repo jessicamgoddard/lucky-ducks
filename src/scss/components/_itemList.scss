@@ -40,8 +40,7 @@
   }
 
   button {
-    background-color: #0f4a8a;
-    color: #fff;
+    @include button-primary();
 
     @media (min-width: 600px) {
       grid-column: span 2;
@@ -86,5 +85,14 @@
     @include button-text();
 
     text-align: right;
+  }
+
+  .item-list__delete {
+    color: #b42318;
+
+    &:hover:not(:disabled),
+    &:active:not(:disabled) {
+      background-color: #fee4e2;
+    }
   }
 }
