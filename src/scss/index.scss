@@ -28,7 +28,7 @@ body {
   display: flex;
   flex-direction: column;
   // Leave room for the pond, but never collapse at high zoom or on short screens
-  height: max(calc(100dvh - 210px), 16rem);
+  height: max(calc(100dvh - var(--pond-height)), 16rem);
   overflow-x: hidden;
   overflow-y: scroll;
   // Let the last item scroll clear of the fade at the bottom
@@ -36,9 +36,14 @@ body {
   mask-image: linear-gradient(to bottom, black calc(100% - 50px), transparent 100%);
 }
 
-// Reserve space under the content for the fixed pond
+// Reserve space under the content for the fixed pond. --pond-height is the water
+// (100px) plus the front edge (see .item-track__edge:last-child).
+.main {
+  --pond-height: 140px;
+}
+
 .main--pond {
-  padding-block-end: 210px;
+  padding-block-end: var(--pond-height);
 }
 
 .title,
