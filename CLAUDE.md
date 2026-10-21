@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working with code in this reposi
 
 ## Project
 
-Random Picker: a React 19 + TypeScript + Vite single-page app styled as a carnival duck pond. Enter options, press Start, then click a duck to reveal what it hides. Deployed to GitHub Pages at https://jessicamgoddard.github.io/random-picker/ (workflow in `.github/workflows/deploy.yml`, runs on push to `main`; Vite `base` is `/random-picker/`). See `README.md` for the to-do list.
+Lucky Ducks: a React 19 + TypeScript + Vite single-page app styled as a carnival duck pond. Enter options, press Start, then click a duck to reveal what it hides. Deployed to GitHub Pages at https://jessicamgoddard.github.io/lucky-ducks/ (workflow in `.github/workflows/deploy.yml`, runs on push to `main`; Vite `base` is `/lucky-ducks/`). See `README.md` for the to-do list.
 
 ## Commands
 
@@ -30,7 +30,7 @@ Random Picker: a React 19 + TypeScript + Vite single-page app styled as a carniv
 - Everything outside `Reveal` is `inert` while it is open (`<main inert>`), and `Reveal` also traps Tab on its Close button.
 - Motion: ducks and waves pause on hover/focus and via the "Pause ducks" toggle (`.is-paused`), and `prefers-reduced-motion` stops all pond motion and rests ducks in their lanes (`--rest-left`).
 - Give new inputs and repeated buttons accessible names (e.g. `aria-label="Edit Alice"`). Buttons need a 24px minimum target.
-- Check with axe-core in Chrome against `npm run preview` (base path `/random-picker/`).
+- Check with axe-core in Chrome against `npm run preview` (base path `/lucky-ducks/`).
 
 ## Styling
 
@@ -49,7 +49,7 @@ Random Picker: a React 19 + TypeScript + Vite single-page app styled as a carniv
 
 ### Issue tracker
 
-Issues live in GitHub Issues (`jessicamgoddard/random-picker`), via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+Issues live in GitHub Issues (`jessicamgoddard/lucky-ducks`), via the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
