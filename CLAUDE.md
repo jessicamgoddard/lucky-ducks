@@ -11,7 +11,7 @@ Lucky Ducks: a React 19 + TypeScript + Vite single-page app styled as a carnival
 - `npm run dev` — Vite dev server
 - `npm run build` — `tsc -b && vite build` (type-checks, then bundles to `dist/`)
 - `npm run lint` — ESLint (flat config in `eslint.config.js`)
-- `npm test` — Vitest (`vitest run`); tests sit next to the code as `*.test.ts`
+- `npm test` — Vitest (`vitest run`); tests sit next to the code as `*.test.ts(x)`. Component and `App` tests use Testing Library with jsdom (opt in per file with a `// @vitest-environment jsdom` first line); pure logic tests stay in the default node environment. jsdom is pinned to v26 so tests run on Node 20 and up.
 - `npm run preview` — serve the production build
 
 ## Architecture
@@ -20,7 +20,7 @@ Lucky Ducks: a React 19 + TypeScript + Vite single-page app styled as a carnival
 - Setup shows `ItemList` and a Start button. The pond phase shows `ItemTrack`, plus an action bar (Reshuffle, Pause ducks, Edit options, Back to setup). Edit options opens `OptionsModal` (a dialog around `ItemList`) so options can be added/removed mid-game; the pond is re-synced on every change.
 - `src/utils/pond.ts` is the pure game logic: one duck per option plus decoy ducks (`decoyCount`: about one per two options, min 1, max 5, none when there are no options). `syncPond` re-deals what the ducks hide, keeping duck ids stable and resizing the pond; picks and option changes both call it, so every pick is a fresh draw. Decoys reveal a random pun from `src/utils/puns.ts`. All ducks look identical.
 - `ItemTrack` renders one `Item` (a duck button) per duck, keyed by duck id. Each `Item` picks its random animation timing once via `useState` initializers. `Reveal` is the result overlay: a duck pops up and a label card appears; real options also fire a CSS-only confetti burst (no dependency). It moves focus to Close, closes on Escape/backdrop, restores focus, and honours `prefers-reduced-motion`.
-- `src/utils/storage.ts` — localStorage wrapper for items, try/catch-guarded.
+- `src/utils/storage.ts` — localStorage wrapper for items, try/catch-guarded; saved data is shape-checked so a corrupt value can't crash the app.
 - `src/utils/general.ts` — layout helpers (`getItemTop`, `getRandomNumber`) for positioning ducks.
 
 ## Accessibility
@@ -30,6 +30,8 @@ Lucky Ducks: a React 19 + TypeScript + Vite single-page app styled as a carnival
 - Everything outside `Reveal` or `OptionsModal` is `inert` while one is open (`<main inert>`). Both close on Escape and return focus to the opener; `Reveal` traps Tab on its Close button and `OptionsModal` cycles Tab through its controls.
 - Reshuffle feedback: `App` bumps `shuffleCount`; each `Item` hops via CSS (`data-shuffle` alternates a/b to restart the animation), the button briefly reads "Shuffled!", and a live-region message is sent.
 - Motion: ducks and waves pause on hover/focus and via the "Pause ducks" / "Start ducks" toggle (`.is-paused`), and `prefers-reduced-motion` stops all pond motion and rests ducks in their lanes (`--rest-left`).
+- When Enter ends an action that moves focus to another button, call `e.preventDefault()` on the keydown (see the rename field in `ItemList`); otherwise the same keypress activates the newly focused button.
+- The duck focus ring has a white halo so it stays visible over the dark pond edge.
 - Give new inputs and repeated buttons accessible names (e.g. `aria-label="Edit Alice"`). Buttons need a 24px minimum target.
 - Check with axe-core in Chrome against `npm run preview` (base path `/lucky-ducks/`).
 

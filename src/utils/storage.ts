@@ -10,6 +10,15 @@ export type PickerItem = {
 };
 
 /**
+ * Whether a value from storage has the shape of a PickerItem.
+ */
+function isPickerItem(value: unknown): value is PickerItem {
+  if (typeof value !== 'object' || value === null) return false;
+  const { id, label } = value as Record<string, unknown>;
+  return typeof id === 'string' && typeof label === 'string';
+}
+
+/**
  * Load items from localStorage.
  * 
  * @return Array of PickerItem
@@ -20,8 +29,9 @@ export function loadItems(): PickerItem[] {
     const raw = localStorage.getItem(STORAGE_ITEMS_KEY);
     // If nothing found, return empty array
     if (!raw) return [];
-    // Parse and return the items
-    return JSON.parse(raw) as PickerItem[];
+    // Parse, and keep only well-formed items so bad saved data can't crash the app
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter(isPickerItem) : [];
   } catch {
     // Otherwise, return empty array
     return [];

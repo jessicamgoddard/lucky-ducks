@@ -40,6 +40,8 @@
     border-radius: 8px;
     outline: 3px solid #0f4a8a;
     outline-offset: 2px;
+    // A white halo around the ring keeps it visible over the dark pond edge too
+    box-shadow: 0 0 0 8px #fff;
   }
 
   &::before,
